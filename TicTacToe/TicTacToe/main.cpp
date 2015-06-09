@@ -1,5 +1,3 @@
-
-
 #include "TheGame.h"
 
 void Initialize();

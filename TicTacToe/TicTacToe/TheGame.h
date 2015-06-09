@@ -1,5 +1,7 @@
 #pragma once
+
 #include "SDL.h"
+class GameBoard;
 class TheGame
 {
 public:
@@ -12,11 +14,11 @@ public:
 private:
 	bool m_exit;
 
-	SDL_Surface* screen;
+	SDL_Surface* m_screen;
+	
+	GameBoard* m_GameBoard;
 
-
-	SDL_Surface* hello;
-
+	//SDL_Surface* hello;
 
 
 };

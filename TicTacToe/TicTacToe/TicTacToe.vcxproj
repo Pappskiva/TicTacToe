@@ -94,7 +94,6 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="GameBoard.h" />
-    <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="TheGame.h" />
     <ClInclude Include="Tile.h" />
   </ItemGroup>
