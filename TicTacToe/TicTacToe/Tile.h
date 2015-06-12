@@ -14,7 +14,7 @@ public:
 	};
 
 	void Initialize(int p_PosX, int p_PosY);
-	void Update(SDL_Surface* p_screen);
+	void Update(SDL_Surface* p_screen, SDL_Event* p_e);
 	void Shutdown();
 	int GetTileValue();
 	void SetTileValue(TileValue p_tileValue);
@@ -26,5 +26,11 @@ private:
 	SDL_Surface* m_Empty;
 	SDL_Surface* m_RenderedSprite;
 	TileValue m_TileValue;
+
+	bool m_prevMouseButtonPressedState;
+	bool m_currMouseButtonPressedState;
+
+	int m_xMin, m_xMax;
+	int m_yMin, m_yMax;
 };
 

@@ -34,22 +34,22 @@ void GameBoard::Initialize()
 	m_Background = NULL;
 	m_Background = SDL_LoadBMP("TicTactoeGrid.bmp");
 }
-bool GameBoard::Update(SDL_Surface* p_screen)
+bool GameBoard::Update(SDL_Surface* p_screen, SDL_Event* p_e)
 {
 	//for (unsigned int i = 0; i < 9; i++)
 	//{
 	//	m_Tiles[i].Update();
 	//}
 	SDL_BlitSurface(m_Background, NULL, p_screen, NULL);
-	m_Tile1->Update(p_screen);
-	m_Tile2->Update(p_screen);
-	m_Tile3->Update(p_screen);
-	m_Tile4->Update(p_screen);
-	m_Tile5->Update(p_screen);
-	m_Tile6->Update(p_screen);
-	m_Tile7->Update(p_screen);
-	m_Tile8->Update(p_screen);
-	m_Tile9->Update(p_screen);
+	m_Tile1->Update(p_screen, p_e);
+	m_Tile2->Update(p_screen, p_e);
+	m_Tile3->Update(p_screen, p_e);
+	m_Tile4->Update(p_screen, p_e);
+	m_Tile5->Update(p_screen, p_e);
+	m_Tile6->Update(p_screen, p_e);
+	m_Tile7->Update(p_screen, p_e);
+	m_Tile8->Update(p_screen, p_e);
+	m_Tile9->Update(p_screen, p_e);
 	return true;
 }
 void GameBoard::Shutdown()

@@ -10,7 +10,7 @@ public:
 	GameBoard();
 	~GameBoard();
 	void Initialize();
-	bool Update(SDL_Surface* p_screen);
+	bool Update(SDL_Surface* p_screen, SDL_Event* p_e);
 	void Shutdown();
 
 private:

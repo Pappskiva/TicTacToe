@@ -29,7 +29,7 @@ bool TheGame::Update()
 		}
 	}
 
-	m_GameBoard->Update(m_screen);
+	m_GameBoard->Update(m_screen, &e);
 	SDL_Flip(m_screen);
 
 	return m_exit;
