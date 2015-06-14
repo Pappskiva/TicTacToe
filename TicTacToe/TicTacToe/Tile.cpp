@@ -66,6 +66,11 @@ void Tile::Update(SDL_Surface* p_screen, SDL_Event* p_e)
 	if (m_TileValue == TV_X)
 		m_RenderedSprite = m_Cross;
 	SDL_BlitSurface(m_RenderedSprite, NULL, p_screen, &m_rectangle);
+	//if (Network::GetInstance()->GetState() == 2)
+	//{
+	//	char* text = (char*)m_tileIndex;
+	//	Network::GetInstance()->SendText(text);
+	//}
 }
 void Tile::Shutdown()
 {

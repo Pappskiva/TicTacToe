@@ -1,11 +1,35 @@
 #include "Network.h"
+#include <iostream>
 #define DEFAULT_PORT "27015"
-#define DEFAULT_BUFLEN 512
+#define DEFAULT_BUFLEN 24
 Network* Network::m_instance;
 Network::Network()
 {
 	m_hostIsInitialized = false;
 	m_clientIsInitialized = false;
+	m_tableLayout[9] = { };
+	for (unsigned int i = 0; i < 9; i++)
+	{
+		m_tableLayout[i].value = 0;
+	}
+	m_tableLayout[0].xPos = 0;
+	m_tableLayout[0].yPos = 0;
+	m_tableLayout[1].xPos = 1;
+	m_tableLayout[1].yPos = 0;
+	m_tableLayout[2].xPos = 2;
+	m_tableLayout[2].yPos = 0;
+	m_tableLayout[3].xPos = 0;
+	m_tableLayout[3].yPos = 1;
+	m_tableLayout[4].xPos = 1;
+	m_tableLayout[4].yPos = 1;
+	m_tableLayout[5].xPos = 2;
+	m_tableLayout[5].yPos = 1;
+	m_tableLayout[6].xPos = 0;
+	m_tableLayout[6].yPos = 2;
+	m_tableLayout[7].xPos = 1;
+	m_tableLayout[7].yPos = 2;
+	m_tableLayout[8].xPos = 2;
+	m_tableLayout[8].yPos = 2;
 }
 Network::~Network()
 {
@@ -197,22 +221,55 @@ void Network::InitializeClient()
 }
 void Network::Update()
 {
+	//if (m_hostIsInitialized)
+	//{
+	//	// Echo the buffer back to the sender
+	//	int iSendResult = send(ClientSocket, p_text, (int)strlen(p_text), 0);
+	//	if (iSendResult == SOCKET_ERROR)
+	//	{
+	//		printf("send failed: %d\n", WSAGetLastError());
+	//		closesocket(ClientSocket);
+	//		WSACleanup();
+	//		return;
+	//	}
+	//}
+	//else if (m_clientIsInitialized)
+	//{
+	//	int iResult = send(ConnectSocket, p_text, (int)strlen(p_text), 0);
+	//	if (iResult == SOCKET_ERROR)
+	//	{
+	//		printf("send failed: %d\n", WSAGetLastError());
+	//		closesocket(ConnectSocket);
+	//		WSACleanup();
+	//		return;
+	//	}
+	//}
 	int recvbuflen = DEFAULT_BUFLEN;
 	char recvbuf[DEFAULT_BUFLEN];
 	int iResult;
 	if (m_hostIsInitialized)
 	{
 		iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-		if (iResult > 0) {
-			printf(" %d\n", recvbuf);
+		if (iResult > 0) 
+		{
+			printf(" %s\n", recvbuf);
 		}
 		else if (iResult == 0)
 		{
 			printf("No message\n");
 		}
-		else 
+		else
 		{
 			printf("recv failed: %d\n", WSAGetLastError());
+			closesocket(ClientSocket);
+			WSACleanup();
+			return;
+		}
+		char* text = "tyty for da message";
+		int iSendResult = send(ClientSocket, text, (int)strlen(text), 0);
+		if (iSendResult == SOCKET_ERROR)
+		{
+			printf("send failed: %d\n", WSAGetLastError());
 			closesocket(ClientSocket);
 			WSACleanup();
 			return;
@@ -220,10 +277,21 @@ void Network::Update()
 	}
 	else if (m_clientIsInitialized)
 	{
+		char* text = "Here is a message";
+		iResult = send(ConnectSocket, text, (int)strlen(text), 0);
+		if (iResult == SOCKET_ERROR)
+		{
+			printf("send failed: %d\n", WSAGetLastError());
+			closesocket(ConnectSocket);
+			WSACleanup();
+			return;
+		}
+
+		//Taking care of the message
 		iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
 		if (iResult > 0)
 		{
-			printf(" %d\n", recvbuf);
+			printf(" %s\n", recvbuf);
 		}
 		else if (iResult == 0)
 		{
@@ -300,7 +368,6 @@ int Network::GetState()
 		return 2;
 	}
 	return 0;
-	int IsHost();
 }
 void Network::SendText(char* p_text)
 {
@@ -327,4 +394,130 @@ void Network::SendText(char* p_text)
 			return;
 		}
 	}
+}
+void Network::CheckForVictory()
+{
+	int cross = 0;
+	int circle = 0;
+	for (unsigned int i = 0; i < 9; i++)
+	{
+		if (m_tableLayout[i].value == 0)
+		{
+			circle++;
+		}
+		if (m_tableLayout[i].value == 1)
+		{
+			cross++;
+		}
+	}
+	if (cross == 3)
+	{
+		tile tile1;
+		tile tile2;
+		tile tile3;
+		tile1.value = 2;
+		tile2.value = 2;
+		tile3.value = 2;
+		for (unsigned int i = 0; i < 9; i++)
+		{
+			if (m_tableLayout[i].value == 1)
+			{
+				if (tile1.value == 2)
+				{
+					tile1 = m_tableLayout[i];
+				}
+				else if (tile2.value == 2)
+				{
+					tile2 = m_tableLayout[i];
+				}
+				else if (tile3.value == 2)
+				{
+					tile3 = m_tableLayout[i];
+				}
+			}
+		}
+
+		if (tile1.xPos == tile2.xPos && tile1.xPos == tile3.xPos)
+		{
+			//Win
+		}
+		else if (tile1.yPos == tile2.yPos && tile1.yPos == tile3.yPos)
+		{
+			//Win
+		}
+		else if (tile2.xPos == 1 && tile2.yPos == 1 && tile1.yPos == 0 && tile3.yPos == 2)
+		{
+			if (tile1.xPos == 0)
+			{
+				if (tile3.xPos == 2)
+				{
+					//Win
+				}
+			}
+			if (tile1.xPos == 2)
+			{
+				if (tile3.xPos == 0)
+				{
+					//Win
+				}
+			}
+		}
+	}
+	if (circle == 3)
+	{
+		tile tile1;
+		tile tile2;
+		tile tile3;
+		tile1.value = 2;
+		tile2.value = 2;
+		tile3.value = 2;
+		for (unsigned int i = 0; i < 9; i++)
+		{
+			if (m_tableLayout[i].value == 0)
+			{
+				if (tile1.value == 2)
+				{
+					tile1 = m_tableLayout[i];
+				}
+				else if (tile2.value == 2)
+				{
+					tile2 = m_tableLayout[i];
+				}
+				else if (tile3.value == 2)
+				{
+					tile3 = m_tableLayout[i];
+				}
+			}
+		}
+
+		if (tile1.xPos == tile2.xPos && tile1.xPos == tile3.xPos)
+		{
+			//Win
+		}
+		else if (tile1.yPos == tile2.yPos && tile1.yPos == tile3.yPos)
+		{
+			//Win
+		}
+		else if (tile2.xPos == 1 && tile2.yPos == 1 && tile1.yPos == 0 && tile3.yPos == 2)
+		{
+			if (tile1.xPos == 0)
+			{
+				if (tile3.xPos == 2)
+				{
+					//Win
+				}
+			}
+			if (tile1.xPos == 2)
+			{
+				if (tile3.xPos == 0)
+				{
+					//Win
+				}
+			}
+		}
+	}
+}
+void Network::SetTile(int p_index, int p_value)
+{
+	m_tableLayout[p_index - 1].value = p_value;
 }

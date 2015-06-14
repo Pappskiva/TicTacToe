@@ -36,18 +36,23 @@ bool TheGame::Update()
 			m_exit = true;
 		}
 	}
+
 	Network::GetInstance()->Update();
-	m_GameBoard->Update(m_screen, &e);
+	if (Network::GetInstance()->GetState() != 0)
+	{
+		m_GameBoard->Update(m_screen, &e);
+	}
 
 	if (m_ExitButton->IsClicked(m_screen, &e))
 	{
 		m_exit = true;
 	}
+
 	if (m_HostButton->IsClicked(m_screen, &e))
 	{
 		Network::GetInstance()->InitializeHost();
 	}
-	if (m_ConnectButton->IsClicked(m_screen, &e))
+	else if (m_ConnectButton->IsClicked(m_screen, &e))
 	{
 		Network::GetInstance()->InitializeClient();
 	}

@@ -5,7 +5,7 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
-#include <stdio.h>
+
 #pragma comment(lib, "Ws2_32.lib")
 class Network
 {
@@ -18,11 +18,13 @@ public:
 	void Disconnect();
 	int GetState();
 	void SendText(char* p_text);
+	void SetTile(int p_index, int p_value);
 
 private:
 	Network();
 	~Network();
 	void SendTable();
+	void CheckForVictory();
 
 	static Network* m_instance;
 	bool m_hostIsInitialized;
@@ -30,5 +32,21 @@ private:
 	WSAData wsaData;
 	SOCKET ConnectSocket;
 	SOCKET ClientSocket;
+
+	enum ServerMessages
+	{
+
+	};
+
+	struct tile
+	{
+		int xPos;
+		int yPos;
+		int value;
+		//0 = cirkel
+		//1 = kryss
+		//2 = tom
+	};
+	tile m_tableLayout[];
 };
 
