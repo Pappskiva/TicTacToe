@@ -13,11 +13,13 @@ public:
 		TV_NONE
 	};
 
-	void Initialize(int p_PosX, int p_PosY);
+	void Initialize(int p_PosX, int p_PosY, int p_index);
 	void Update(SDL_Surface* p_screen, SDL_Event* p_e);
 	void Shutdown();
 	int GetTileValue();
 	void SetTileValue(TileValue p_tileValue);
+	int GetTileIndex();
+	
 private:
 
 	SDL_Rect m_rectangle;
@@ -32,5 +34,6 @@ private:
 
 	int m_xMin, m_xMax;
 	int m_yMin, m_yMax;
+	int m_tileIndex;
 };
 

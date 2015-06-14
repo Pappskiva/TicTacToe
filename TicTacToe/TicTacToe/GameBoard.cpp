@@ -22,15 +22,15 @@ void GameBoard::Initialize()
 	m_Tile7 = new Tile();
 	m_Tile8 = new Tile();
 	m_Tile9 = new Tile();
-	m_Tile1->Initialize(0,0);
-	m_Tile2->Initialize(105, 0);
-	m_Tile3->Initialize(210, 0);
-	m_Tile4->Initialize(0, 105);
-	m_Tile5->Initialize(105, 105);
-	m_Tile6->Initialize(210, 105);
-	m_Tile7->Initialize(0, 210);
-	m_Tile8->Initialize(105, 210);
-	m_Tile9->Initialize(210, 210);
+	m_Tile1->Initialize(0,0,1);
+	m_Tile2->Initialize(105, 0,2);
+	m_Tile3->Initialize(210, 0,3);
+	m_Tile4->Initialize(0, 105,4);
+	m_Tile5->Initialize(105, 105,5);
+	m_Tile6->Initialize(210, 105,6);
+	m_Tile7->Initialize(0, 210,7);
+	m_Tile8->Initialize(105, 210,8);
+	m_Tile9->Initialize(210, 210,9);
 	m_Background = NULL;
 	m_Background = SDL_LoadBMP("TicTactoeGrid.bmp");
 }

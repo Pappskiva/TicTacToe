@@ -88,12 +88,14 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="GameBoard.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Network.cpp" />
     <ClCompile Include="TheGame.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="GameBoard.h" />
+    <ClInclude Include="Network.h" />
     <ClInclude Include="TheGame.h" />
     <ClInclude Include="Tile.h" />
   </ItemGroup>

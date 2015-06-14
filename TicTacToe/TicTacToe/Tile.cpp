@@ -1,8 +1,10 @@
 #include "Tile.h"
+#include <stdio.h>
+#include "Network.h"
 
 Tile::Tile(){}
 Tile::~Tile(){}
-void Tile::Initialize(int p_PosX, int p_PosY)
+void Tile::Initialize(int p_PosX, int p_PosY, int p_index)
 {
 	m_Cross = NULL;
 	m_Cross = SDL_LoadBMP("Cross.bmp");
@@ -18,10 +20,10 @@ void Tile::Initialize(int p_PosX, int p_PosY)
 	m_xMax = p_PosX + 100;
 	m_yMin = p_PosY;
 	m_yMax = p_PosY + 100;
+	m_tileIndex = p_index;
 }
 void Tile::Update(SDL_Surface* p_screen, SDL_Event* p_e)
 {
-
 	if (true)//If clients turn
 	{
 		int x, y;
@@ -47,6 +49,12 @@ void Tile::Update(SDL_Surface* p_screen, SDL_Event* p_e)
 				{
 					m_TileValue = TV_NONE;
 				}
+				printf("Tile number %d has been pressed\n", m_tileIndex);
+				//if (Network::GetInstance()->GetState() == 2)
+				//{
+				//	char* text = "CLient pressed a tile";
+				//	Network::GetInstance()->SendText(text);
+				//}
 			}
 		}
 	}
@@ -72,4 +80,8 @@ int Tile::GetTileValue()
 void Tile::SetTileValue(TileValue p_tileValue)
 {
 	m_TileValue = p_tileValue;
+}
+int Tile::GetTileIndex()
+{
+	return m_tileIndex;
 }

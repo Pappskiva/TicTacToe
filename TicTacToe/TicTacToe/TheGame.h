@@ -2,6 +2,8 @@
 
 #include "SDL.h"
 class GameBoard;
+class Button;
+
 class TheGame
 {
 public:
@@ -17,9 +19,10 @@ private:
 	SDL_Surface* m_screen;
 	
 	GameBoard* m_GameBoard;
-
-	//SDL_Surface* hello;
-
+	Button* m_ConnectButton;
+	Button* m_ExitButton;
+	Button* m_HostButton;
+	Button* m_DisconnectButton;
 
 };
 

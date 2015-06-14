@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-//#include "Tile.h"
 #include "SDL.h"
 class Tile;
 
