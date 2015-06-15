@@ -1,35 +1,12 @@
 #include "Network.h"
 #include <iostream>
 #define DEFAULT_PORT "27015"
-#define DEFAULT_BUFLEN 24
+#define DEFAULT_BUFLEN 512
 Network* Network::m_instance;
 Network::Network()
 {
 	m_hostIsInitialized = false;
 	m_clientIsInitialized = false;
-	m_tableLayout[9] = { };
-	for (unsigned int i = 0; i < 9; i++)
-	{
-		m_tableLayout[i].value = 0;
-	}
-	m_tableLayout[0].xPos = 0;
-	m_tableLayout[0].yPos = 0;
-	m_tableLayout[1].xPos = 1;
-	m_tableLayout[1].yPos = 0;
-	m_tableLayout[2].xPos = 2;
-	m_tableLayout[2].yPos = 0;
-	m_tableLayout[3].xPos = 0;
-	m_tableLayout[3].yPos = 1;
-	m_tableLayout[4].xPos = 1;
-	m_tableLayout[4].yPos = 1;
-	m_tableLayout[5].xPos = 2;
-	m_tableLayout[5].yPos = 1;
-	m_tableLayout[6].xPos = 0;
-	m_tableLayout[6].yPos = 2;
-	m_tableLayout[7].xPos = 1;
-	m_tableLayout[7].yPos = 2;
-	m_tableLayout[8].xPos = 2;
-	m_tableLayout[8].yPos = 2;
 }
 Network::~Network()
 {
@@ -140,7 +117,29 @@ void Network::InitializeHost()
 	{
 		printf("client has connected\n");
 	}
-
+	m_tableLayout[9] = {};
+	for (unsigned int i = 0; i < 9; i++)
+	{
+		m_tableLayout[i].value = 0;
+	}
+	m_tableLayout[0].xPos = 0;
+	m_tableLayout[0].yPos = 0;
+	m_tableLayout[1].xPos = 1;
+	m_tableLayout[1].yPos = 0;
+	m_tableLayout[2].xPos = 2;
+	m_tableLayout[2].yPos = 0;
+	m_tableLayout[3].xPos = 0;
+	m_tableLayout[3].yPos = 1;
+	m_tableLayout[4].xPos = 1;
+	m_tableLayout[4].yPos = 1;
+	m_tableLayout[5].xPos = 2;
+	m_tableLayout[5].yPos = 1;
+	m_tableLayout[6].xPos = 0;
+	m_tableLayout[6].yPos = 2;
+	m_tableLayout[7].xPos = 1;
+	m_tableLayout[7].yPos = 2;
+	m_tableLayout[8].xPos = 2;
+	m_tableLayout[8].yPos = 2;
 }
 void Network::InitializeClient()
 {
@@ -218,6 +217,30 @@ void Network::InitializeClient()
 	{
 		printf("Connected to server\n");
 	}
+
+	m_tableLayout[9] = {};
+	for (unsigned int i = 0; i < 9; i++)
+	{
+		m_tableLayout[i].value = 0;
+	}
+	m_tableLayout[0].xPos = 0;
+	m_tableLayout[0].yPos = 0;
+	m_tableLayout[1].xPos = 1;
+	m_tableLayout[1].yPos = 0;
+	m_tableLayout[2].xPos = 2;
+	m_tableLayout[2].yPos = 0;
+	m_tableLayout[3].xPos = 0;
+	m_tableLayout[3].yPos = 1;
+	m_tableLayout[4].xPos = 1;
+	m_tableLayout[4].yPos = 1;
+	m_tableLayout[5].xPos = 2;
+	m_tableLayout[5].yPos = 1;
+	m_tableLayout[6].xPos = 0;
+	m_tableLayout[6].yPos = 2;
+	m_tableLayout[7].xPos = 1;
+	m_tableLayout[7].yPos = 2;
+	m_tableLayout[8].xPos = 2;
+	m_tableLayout[8].yPos = 2;
 }
 void Network::Update()
 {
