@@ -19,12 +19,14 @@ public:
 	int GetState();
 	void SendText(char* p_text);
 	void SetTile(int p_index, int p_value);
+	int GetTileValue(int p_index);
+	void SendTable();
 
 private:
 	Network();
 	~Network();
-	void SendTable();
 	void CheckForVictory();
+	void HandleServerMessage(char p_message[]);
 
 	static Network* m_instance;
 	bool m_hostIsInitialized;
@@ -32,11 +34,6 @@ private:
 	WSAData wsaData;
 	SOCKET ConnectSocket;
 	SOCKET ClientSocket;
-
-	enum ServerMessages
-	{
-
-	};
 
 	struct tile
 	{
@@ -47,6 +44,8 @@ private:
 		//1 = kryss
 		//2 = tom
 	};
-	tile m_tableLayout[];
+	tile m_tableLayout[9];
+
+
 };
 

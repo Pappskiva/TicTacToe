@@ -1,16 +1,14 @@
 #include "Network.h"
 #include <iostream>
 #define DEFAULT_PORT "27015"
-#define DEFAULT_BUFLEN 512
+#define DEFAULT_BUFLEN 10
 Network* Network::m_instance;
 Network::Network()
 {
 	m_hostIsInitialized = false;
 	m_clientIsInitialized = false;
 }
-Network::~Network()
-{
-}
+Network::~Network(){}
 Network* Network::GetInstance()
 {
 	if (m_instance == nullptr)
@@ -117,10 +115,9 @@ void Network::InitializeHost()
 	{
 		printf("client has connected\n");
 	}
-	m_tableLayout[9] = {};
 	for (unsigned int i = 0; i < 9; i++)
 	{
-		m_tableLayout[i].value = 0;
+		m_tableLayout[i].value = 2;
 	}
 	m_tableLayout[0].xPos = 0;
 	m_tableLayout[0].yPos = 0;
@@ -140,6 +137,7 @@ void Network::InitializeHost()
 	m_tableLayout[7].yPos = 2;
 	m_tableLayout[8].xPos = 2;
 	m_tableLayout[8].yPos = 2;
+	printf("Initialized Table Layout\n");
 }
 void Network::InitializeClient()
 {
@@ -218,10 +216,9 @@ void Network::InitializeClient()
 		printf("Connected to server\n");
 	}
 
-	m_tableLayout[9] = {};
 	for (unsigned int i = 0; i < 9; i++)
 	{
-		m_tableLayout[i].value = 0;
+		m_tableLayout[i].value = 2;
 	}
 	m_tableLayout[0].xPos = 0;
 	m_tableLayout[0].yPos = 0;
@@ -241,41 +238,34 @@ void Network::InitializeClient()
 	m_tableLayout[7].yPos = 2;
 	m_tableLayout[8].xPos = 2;
 	m_tableLayout[8].yPos = 2;
+	printf("Initialized Table Layout\n");
 }
 void Network::Update()
 {
-	//if (m_hostIsInitialized)
-	//{
-	//	// Echo the buffer back to the sender
-	//	int iSendResult = send(ClientSocket, p_text, (int)strlen(p_text), 0);
-	//	if (iSendResult == SOCKET_ERROR)
-	//	{
-	//		printf("send failed: %d\n", WSAGetLastError());
-	//		closesocket(ClientSocket);
-	//		WSACleanup();
-	//		return;
-	//	}
-	//}
-	//else if (m_clientIsInitialized)
-	//{
-	//	int iResult = send(ConnectSocket, p_text, (int)strlen(p_text), 0);
-	//	if (iResult == SOCKET_ERROR)
-	//	{
-	//		printf("send failed: %d\n", WSAGetLastError());
-	//		closesocket(ConnectSocket);
-	//		WSACleanup();
-	//		return;
-	//	}
-	//}
 	int recvbuflen = DEFAULT_BUFLEN;
 	char recvbuf[DEFAULT_BUFLEN];
 	int iResult;
 	if (m_hostIsInitialized)
 	{
 		iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+
 		if (iResult > 0) 
-		{
-			printf(" %s\n", recvbuf);
+		{/*	
+			///char* printText = std::strtok(recvbuf,"_");
+			//printf(" %s\n", printText);
+			//printf(" %s\n", recvbuf);
+		char tempBuf[DEFAULT_BUFLEN];
+
+			std::strcpy(tempBuf, recvbuf);
+			//for (unsigned int i = 0; i < 10; i++)
+			//{
+			//	printf("%c", recvbuf[i]);
+			//}
+			//printf("\n");*/
+
+			char tempBuf[DEFAULT_BUFLEN];
+			std::strcpy(tempBuf, recvbuf);
+			HandleServerMessage(tempBuf);
 		}
 		else if (iResult == 0)
 		{
@@ -284,37 +274,21 @@ void Network::Update()
 		else
 		{
 			printf("recv failed: %d\n", WSAGetLastError());
-			closesocket(ClientSocket);
-			WSACleanup();
 			return;
 		}
-		char* text = "tyty for da message";
-		int iSendResult = send(ClientSocket, text, (int)strlen(text), 0);
-		if (iSendResult == SOCKET_ERROR)
-		{
-			printf("send failed: %d\n", WSAGetLastError());
-			closesocket(ClientSocket);
-			WSACleanup();
-			return;
-		}
+		SendText("000000000");
 	}
 	else if (m_clientIsInitialized)
 	{
-		char* text = "Here is a message";
-		iResult = send(ConnectSocket, text, (int)strlen(text), 0);
-		if (iResult == SOCKET_ERROR)
-		{
-			printf("send failed: %d\n", WSAGetLastError());
-			closesocket(ConnectSocket);
-			WSACleanup();
-			return;
-		}
+		SendText("000000000");
 
 		//Taking care of the message
 		iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
 		if (iResult > 0)
 		{
-			printf(" %s\n", recvbuf);
+			char tempBuf[DEFAULT_BUFLEN];
+			std::strcpy(tempBuf, recvbuf);
+			HandleServerMessage(tempBuf);
 		}
 		else if (iResult == 0)
 		{
@@ -335,6 +309,8 @@ void Network::Shutdown()
 	//{
 	//}
 	m_instance->Disconnect();
+	m_instance = nullptr;
+	delete m_instance;
 }
 void Network::Disconnect()
 {
@@ -371,14 +347,26 @@ void Network::Disconnect()
 }
 void Network::SendTable()
 {
-	if (m_hostIsInitialized)
+	char temp[DEFAULT_BUFLEN];
+	temp[0] = '1';
+	for (unsigned int i = 1; i < 9; i++)
 	{
-
+		if (m_tableLayout[i-1].value == 0)
+			temp[i] = '0';
+		if (m_tableLayout[i-1].value == 1)
+			temp[i] = '1';
+		if (m_tableLayout[i-1].value == 2)
+			temp[i] = '2';
 	}
-	else if (m_clientIsInitialized)
-	{
+	//char*	textToSend = temp.c_str();
+	//char *textToSend = new char[temp.size() + 1];
+	//std::copy(temp.begin(), temp.end(), textToSend);
+	//textToSend[temp.size()] = '\0';
 
-	}
+	
+
+	SendText(temp);
+	//delete[] textToSend;
 }
 int Network::GetState()
 {
@@ -400,10 +388,7 @@ void Network::SendText(char* p_text)
 		int iSendResult = send(ClientSocket, p_text, (int)strlen(p_text), 0);
 		if (iSendResult == SOCKET_ERROR) 
 		{
-			printf("send failed: %d\n", WSAGetLastError());
-			closesocket(ClientSocket);
-			WSACleanup();
-			return;
+			printf("send from host failed: %d\n", WSAGetLastError());
 		}
 	}
 	else if (m_clientIsInitialized)
@@ -411,10 +396,7 @@ void Network::SendText(char* p_text)
 		int iResult = send(ConnectSocket, p_text, (int)strlen(p_text), 0);
 		if (iResult == SOCKET_ERROR) 
 		{
-			printf("send failed: %d\n", WSAGetLastError());
-			closesocket(ConnectSocket);
-			WSACleanup();
-			return;
+			printf("send from client failed: %d\n", WSAGetLastError());
 		}
 	}
 }
@@ -543,4 +525,109 @@ void Network::CheckForVictory()
 void Network::SetTile(int p_index, int p_value)
 {
 	m_tableLayout[p_index - 1].value = p_value;
+}
+int Network::GetTileValue(int p_index)
+{
+	return m_tableLayout[p_index - 1].value;
+}
+void Network::HandleServerMessage(char p_message[])
+{
+	//char tempBuf[DEFAULT_BUFLEN];
+	//std::strcpy(tempBuf, p_message);
+	if (m_hostIsInitialized)
+	{
+		switch (p_message[0])
+		{
+		case '0'://idle
+			//printf("Client is idle");
+			break;
+		case '1'://Update Table
+			//m_tableLayout[0].value = tempBuf[1];
+			//m_tableLayout[1].value = tempBuf[2];
+			//m_tableLayout[2].value = tempBuf[3];
+			//m_tableLayout[3].value = tempBuf[4];
+			//m_tableLayout[4].value = tempBuf[5];
+			//m_tableLayout[5].value = tempBuf[6];
+			//m_tableLayout[6].value = tempBuf[7];
+			//m_tableLayout[7].value = tempBuf[8];
+			//m_tableLayout[8].value = tempBuf[9];
+			for (unsigned int i = 0; i < 9; i++)
+			{
+				if (p_message[i + 1] == '0')
+					m_tableLayout[i].value = 0;
+				else if (p_message[i + 1] == '1')
+					m_tableLayout[i].value = 1;
+				else if (p_message[i + 1] == '2')
+					m_tableLayout[i].value = 2;
+			}
+			break;
+		//case '2':
+		//	break;
+		//case '3':
+		//	break;
+		//case '4':
+		//	break;
+		//case '5':
+		//	break;
+		//case '6':
+		//	break;
+		//case '7':
+		//	break;
+		//case '8':
+		//	break;
+		//case '9':
+		//	break;
+		default:
+			printf("Not a message\n");
+			break;
+		}
+	}
+	if (m_clientIsInitialized)
+	{
+		switch (p_message[0])
+		{
+		case '0'://idle
+			//printf("Host is idle");
+			break;
+		case '1'://Update Table
+			//m_tableLayout[0].value = tempBuf[1];
+			//m_tableLayout[1].value = tempBuf[2];
+			//m_tableLayout[2].value = tempBuf[3];
+			//m_tableLayout[3].value = tempBuf[4];
+			//m_tableLayout[4].value = tempBuf[5];
+			//m_tableLayout[5].value = tempBuf[6];
+			//m_tableLayout[6].value = tempBuf[7];
+			//m_tableLayout[7].value = tempBuf[8];
+			//m_tableLayout[8].value = tempBuf[9];
+			for (unsigned int i = 0; i < 9; i++)
+			{
+				if (p_message[i + 1] == '0')
+					m_tableLayout[i].value = 0;
+				if (p_message[i + 1] == '1')
+					m_tableLayout[i].value = 1;
+				if (p_message[i + 1] == '2')
+					m_tableLayout[i].value = 2;
+			}
+			break;
+		//case '2':
+		//	break;
+		//case '3':
+		//	break;
+		//case '4':
+		//	break;
+		//case '5':
+		//	break;
+		//case '6':
+		//	break;
+		//case '7':
+		//	break;
+		//case '8':
+		//	break;
+		//case '9':
+		//	break;
+		default:
+			printf("Not a message\n");
+			break;
+		}
+	}
 }

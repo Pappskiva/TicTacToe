@@ -49,12 +49,14 @@ void Tile::Update(SDL_Surface* p_screen, SDL_Event* p_e)
 				{
 					m_TileValue = TV_NONE;
 				}
-				printf("Tile number %d has been pressed\n", m_tileIndex);
+				//printf("Tile number %d has been pressed\n", m_tileIndex);
 				//if (Network::GetInstance()->GetState() == 2)
 				//{
 				//	char* text = "CLient pressed a tile";
 				//	Network::GetInstance()->SendText(text);
 				//}
+				Network::GetInstance()->SetTile(m_tileIndex, (int)m_TileValue);
+				Network::GetInstance()->SendTable();
 			}
 		}
 	}
@@ -71,6 +73,7 @@ void Tile::Update(SDL_Surface* p_screen, SDL_Event* p_e)
 	//	char* text = (char*)m_tileIndex;
 	//	Network::GetInstance()->SendText(text);
 	//}
+	m_TileValue = (TileValue)Network::GetInstance()->GetTileValue(m_tileIndex);
 }
 void Tile::Shutdown()
 {
