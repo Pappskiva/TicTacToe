@@ -1,7 +1,7 @@
 #include "Network.h"
 #include <iostream>
 #define DEFAULT_PORT "27015"
-#define DEFAULT_BUFLEN 10
+#define DEFAULT_BUFLEN 11
 Network* Network::m_instance;
 Network::Network()
 {
@@ -19,6 +19,8 @@ Network* Network::GetInstance()
 }
 void Network::InitializeHost()
 {
+	test = 0;
+	m_whooseTurn = 0;
 	int iResult;
 	printf("This is the host\n");
 
@@ -115,6 +117,15 @@ void Network::InitializeHost()
 	{
 		printf("client has connected\n");
 	}
+
+	u_long iMode = 1;
+
+	iResult = ioctlsocket(ClientSocket, FIONBIO, &iMode);
+	if (iResult == SOCKET_ERROR)
+	{
+		printf("ioctsocket failed with error thingy");
+	}
+
 	for (unsigned int i = 0; i < 9; i++)
 	{
 		m_tableLayout[i].value = 2;
@@ -141,6 +152,8 @@ void Network::InitializeHost()
 }
 void Network::InitializeClient()
 {
+	test = 0;
+	m_whooseTurn = 0;
 	int iResult;
 	printf("This is the client\n");
 	if (m_hostIsInitialized)//If changed from host to client
@@ -216,6 +229,15 @@ void Network::InitializeClient()
 		printf("Connected to server\n");
 	}
 
+	u_long iMode = 1;
+
+	iResult = ioctlsocket(ConnectSocket, FIONBIO, &iMode);
+	if (iResult == SOCKET_ERROR)
+	{
+		printf("ioctsocket failed with error thingy");
+	}
+
+
 	for (unsigned int i = 0; i < 9; i++)
 	{
 		m_tableLayout[i].value = 2;
@@ -250,55 +272,38 @@ void Network::Update()
 		iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
 
 		if (iResult > 0) 
-		{/*	
-			///char* printText = std::strtok(recvbuf,"_");
-			//printf(" %s\n", printText);
-			//printf(" %s\n", recvbuf);
-		char tempBuf[DEFAULT_BUFLEN];
-
-			std::strcpy(tempBuf, recvbuf);
-			//for (unsigned int i = 0; i < 10; i++)
-			//{
-			//	printf("%c", recvbuf[i]);
-			//}
-			//printf("\n");*/
-
+		{
 			char tempBuf[DEFAULT_BUFLEN];
 			std::strcpy(tempBuf, recvbuf);
-			HandleServerMessage(tempBuf);
+			if (tempBuf[0] >= 0)
+			{
+				HandleServerMessage(tempBuf);
+			}
 		}
 		else if (iResult == 0)
 		{
 			printf("No message\n");
 		}
-		else
-		{
-			printf("recv failed: %d\n", WSAGetLastError());
-			return;
-		}
-		SendText("000000000");
 	}
 	else if (m_clientIsInitialized)
 	{
-		SendText("000000000");
-
 		//Taking care of the message
 		iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
 		if (iResult > 0)
 		{
 			char tempBuf[DEFAULT_BUFLEN];
 			std::strcpy(tempBuf, recvbuf);
-			HandleServerMessage(tempBuf);
+			if (tempBuf[0] != -52)
+			{
+				HandleServerMessage(tempBuf);
+			}
 		}
 		else if (iResult == 0)
 		{
 			printf("No message\n");
 		}
-		else
-		{
-			printf("recv failed: %d\n", WSAGetLastError());
-		}
 	}
+	CheckForVictory();
 }
 void Network::Shutdown()
 {
@@ -349,7 +354,7 @@ void Network::SendTable()
 {
 	char temp[DEFAULT_BUFLEN];
 	temp[0] = '1';
-	for (unsigned int i = 1; i < 9; i++)
+	for (unsigned int i = 1; i < 10; i++)
 	{
 		if (m_tableLayout[i-1].value == 0)
 			temp[i] = '0';
@@ -357,16 +362,18 @@ void Network::SendTable()
 			temp[i] = '1';
 		if (m_tableLayout[i-1].value == 2)
 			temp[i] = '2';
+	}	
+	if (m_whooseTurn == 0)
+	{
+		temp[10] = '1';
+		m_whooseTurn = 1;
 	}
-	//char*	textToSend = temp.c_str();
-	//char *textToSend = new char[temp.size() + 1];
-	//std::copy(temp.begin(), temp.end(), textToSend);
-	//textToSend[temp.size()] = '\0';
-
-	
-
+	else
+	{
+		temp[10] = '0';
+		m_whooseTurn = 0;
+	}
 	SendText(temp);
-	//delete[] textToSend;
 }
 int Network::GetState()
 {
@@ -445,10 +452,14 @@ void Network::CheckForVictory()
 		if (tile1.xPos == tile2.xPos && tile1.xPos == tile3.xPos)
 		{
 			//Win
+			printf("Cross wins... %d\n", test);
+			test++;
 		}
 		else if (tile1.yPos == tile2.yPos && tile1.yPos == tile3.yPos)
 		{
 			//Win
+			printf("Cross wins... %d\n", test);
+			test++;
 		}
 		else if (tile2.xPos == 1 && tile2.yPos == 1 && tile1.yPos == 0 && tile3.yPos == 2)
 		{
@@ -457,6 +468,8 @@ void Network::CheckForVictory()
 				if (tile3.xPos == 2)
 				{
 					//Win
+					printf("Cross wins... %d\n", test);
+					test++;
 				}
 			}
 			if (tile1.xPos == 2)
@@ -464,6 +477,8 @@ void Network::CheckForVictory()
 				if (tile3.xPos == 0)
 				{
 					//Win
+					printf("Cross wins... %d\n", test);
+					test++;
 				}
 			}
 		}
@@ -498,10 +513,14 @@ void Network::CheckForVictory()
 		if (tile1.xPos == tile2.xPos && tile1.xPos == tile3.xPos)
 		{
 			//Win
+			printf("Circle wins... %d\n", test);
+			test++;
 		}
 		else if (tile1.yPos == tile2.yPos && tile1.yPos == tile3.yPos)
 		{
 			//Win
+			printf("Circle wins... %d\n", test);
+			test++;
 		}
 		else if (tile2.xPos == 1 && tile2.yPos == 1 && tile1.yPos == 0 && tile3.yPos == 2)
 		{
@@ -510,6 +529,8 @@ void Network::CheckForVictory()
 				if (tile3.xPos == 2)
 				{
 					//Win
+					printf("Circle wins... %d\n", test);
+					test++;
 				}
 			}
 			if (tile1.xPos == 2)
@@ -517,14 +538,23 @@ void Network::CheckForVictory()
 				if (tile3.xPos == 0)
 				{
 					//Win
+					printf("Circle wins... %d\n", test);
+					test++;
 				}
 			}
 		}
 	}
 }
-void Network::SetTile(int p_index, int p_value)
+void Network::SetTile(int p_index)
 {
-	m_tableLayout[p_index - 1].value = p_value;
+	if (GetState() == 1)
+	{
+		m_tableLayout[p_index - 1].value = 0;
+	}
+	else if (GetState() == 2)
+	{
+		m_tableLayout[p_index - 1].value = 1;
+	}
 }
 int Network::GetTileValue(int p_index)
 {
@@ -532,25 +562,13 @@ int Network::GetTileValue(int p_index)
 }
 void Network::HandleServerMessage(char p_message[])
 {
-	//char tempBuf[DEFAULT_BUFLEN];
-	//std::strcpy(tempBuf, p_message);
 	if (m_hostIsInitialized)
 	{
 		switch (p_message[0])
 		{
 		case '0'://idle
-			//printf("Client is idle");
 			break;
 		case '1'://Update Table
-			//m_tableLayout[0].value = tempBuf[1];
-			//m_tableLayout[1].value = tempBuf[2];
-			//m_tableLayout[2].value = tempBuf[3];
-			//m_tableLayout[3].value = tempBuf[4];
-			//m_tableLayout[4].value = tempBuf[5];
-			//m_tableLayout[5].value = tempBuf[6];
-			//m_tableLayout[6].value = tempBuf[7];
-			//m_tableLayout[7].value = tempBuf[8];
-			//m_tableLayout[8].value = tempBuf[9];
 			for (unsigned int i = 0; i < 9; i++)
 			{
 				if (p_message[i + 1] == '0')
@@ -560,23 +578,18 @@ void Network::HandleServerMessage(char p_message[])
 				else if (p_message[i + 1] == '2')
 					m_tableLayout[i].value = 2;
 			}
+			if (p_message[10] == '1')
+			{
+				m_whooseTurn = 1;
+			}
+			else
+			{
+				m_whooseTurn = 0;
+			}
+
 			break;
-		//case '2':
-		//	break;
-		//case '3':
-		//	break;
-		//case '4':
-		//	break;
-		//case '5':
-		//	break;
-		//case '6':
-		//	break;
-		//case '7':
-		//	break;
-		//case '8':
-		//	break;
-		//case '9':
-		//	break;
+		case '2':
+			break;
 		default:
 			printf("Not a message\n");
 			break;
@@ -590,15 +603,6 @@ void Network::HandleServerMessage(char p_message[])
 			//printf("Host is idle");
 			break;
 		case '1'://Update Table
-			//m_tableLayout[0].value = tempBuf[1];
-			//m_tableLayout[1].value = tempBuf[2];
-			//m_tableLayout[2].value = tempBuf[3];
-			//m_tableLayout[3].value = tempBuf[4];
-			//m_tableLayout[4].value = tempBuf[5];
-			//m_tableLayout[5].value = tempBuf[6];
-			//m_tableLayout[6].value = tempBuf[7];
-			//m_tableLayout[7].value = tempBuf[8];
-			//m_tableLayout[8].value = tempBuf[9];
 			for (unsigned int i = 0; i < 9; i++)
 			{
 				if (p_message[i + 1] == '0')
@@ -608,26 +612,66 @@ void Network::HandleServerMessage(char p_message[])
 				if (p_message[i + 1] == '2')
 					m_tableLayout[i].value = 2;
 			}
+			if (p_message[10] == '1')
+			{
+				m_whooseTurn = 1;
+			}
+			else
+			{
+				m_whooseTurn = 0;
+			}
 			break;
-		//case '2':
-		//	break;
-		//case '3':
-		//	break;
-		//case '4':
-		//	break;
-		//case '5':
-		//	break;
-		//case '6':
-		//	break;
-		//case '7':
-		//	break;
-		//case '8':
-		//	break;
-		//case '9':
-		//	break;
+		case '2':
+			break;
 		default:
 			printf("Not a message\n");
 			break;
 		}
 	}
+}
+int Network::GetNumberOfPlacedTiles()
+{
+	int cross = 0;
+	int circle = 0;
+	for (unsigned int i = 0; i < 9; i++)
+	{
+		if (m_tableLayout[i].value == 0)
+		{
+			circle++;
+		}
+		if (m_tableLayout[i].value == 1)
+		{
+			cross++;
+		}
+	}
+
+	if (GetState() == 1)
+	{
+		return circle;
+	}
+	else if (GetState() == 2)
+	{
+		return cross;
+	}
+	else
+	{
+		return 0;
+	}
+}
+void Network::MoveTile(int p_selectedTileIndex, int p_destinationTileIndex)
+{
+	m_tableLayout[p_destinationTileIndex-1].value = m_tableLayout[p_selectedTileIndex-1].value;
+	m_tableLayout[p_selectedTileIndex-1].value = 2;
+}
+bool Network::MyTurn()
+{
+	if (m_whooseTurn == 0 && GetState() == 1)
+	{
+		return true;
+	}
+	else if (m_whooseTurn == 1 && GetState() == 2)
+	{
+		return true;
+	}
+	return false;
 }

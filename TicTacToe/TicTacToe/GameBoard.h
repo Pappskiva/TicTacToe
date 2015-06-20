@@ -14,6 +14,7 @@ public:
 
 private:
 	//std::vector<Tile> m_Tiles;
+	void TileClickCheck(Tile *p_tile, SDL_Surface* p_screen, SDL_Event* p_e);
 	SDL_Surface* m_Background;
 	Tile* m_Tile1;
 	Tile* m_Tile2;
@@ -24,6 +25,7 @@ private:
 	Tile* m_Tile7;
 	Tile* m_Tile8;
 	Tile* m_Tile9;
+	Tile* m_selectedTile;
 
 };
 

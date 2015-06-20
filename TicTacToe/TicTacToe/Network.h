@@ -18,9 +18,12 @@ public:
 	void Disconnect();
 	int GetState();
 	void SendText(char* p_text);
-	void SetTile(int p_index, int p_value);
+	void SetTile(int p_index);
 	int GetTileValue(int p_index);
 	void SendTable();
+	int GetNumberOfPlacedTiles();
+	void MoveTile(int p_selectedTileIndex, int p_destinationTileIndex);
+	bool MyTurn();
 
 private:
 	Network();
@@ -46,6 +49,8 @@ private:
 	};
 	tile m_tableLayout[9];
 
+	int m_whooseTurn;
 
+	int test;
 };
 

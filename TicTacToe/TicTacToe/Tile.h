@@ -14,7 +14,7 @@ public:
 	};
 
 	void Initialize(int p_PosX, int p_PosY, int p_index);
-	void Update(SDL_Surface* p_screen, SDL_Event* p_e);
+	bool Update(SDL_Surface* p_screen, SDL_Event* p_e);
 	void Shutdown();
 	int GetTileValue();
 	void SetTileValue(TileValue p_tileValue);

@@ -22,9 +22,10 @@ void Tile::Initialize(int p_PosX, int p_PosY, int p_index)
 	m_yMax = p_PosY + 100;
 	m_tileIndex = p_index;
 }
-void Tile::Update(SDL_Surface* p_screen, SDL_Event* p_e)
+bool Tile::Update(SDL_Surface* p_screen, SDL_Event* p_e)
 {
-	if (true)//If clients turn
+	bool isClicked = false;
+	if (Network::GetInstance()->MyTurn())//If clients turn
 	{
 		int x, y;
 		bool mouseOverTile = false;
@@ -37,7 +38,7 @@ void Tile::Update(SDL_Surface* p_screen, SDL_Event* p_e)
 		{
 			if (p_e->type == SDL_MOUSEBUTTONUP)
 			{
-				if (m_TileValue == TV_NONE)
+				/*if (m_TileValue == TV_NONE)
 				{
 					m_TileValue = TV_O;
 				}
@@ -48,15 +49,9 @@ void Tile::Update(SDL_Surface* p_screen, SDL_Event* p_e)
 				else if (m_TileValue == TV_X)
 				{
 					m_TileValue = TV_NONE;
-				}
-				//printf("Tile number %d has been pressed\n", m_tileIndex);
-				//if (Network::GetInstance()->GetState() == 2)
-				//{
-				//	char* text = "CLient pressed a tile";
-				//	Network::GetInstance()->SendText(text);
-				//}
-				Network::GetInstance()->SetTile(m_tileIndex, (int)m_TileValue);
-				Network::GetInstance()->SendTable();
+				}*/
+
+				isClicked = true;
 			}
 		}
 	}
@@ -68,12 +63,8 @@ void Tile::Update(SDL_Surface* p_screen, SDL_Event* p_e)
 	if (m_TileValue == TV_X)
 		m_RenderedSprite = m_Cross;
 	SDL_BlitSurface(m_RenderedSprite, NULL, p_screen, &m_rectangle);
-	//if (Network::GetInstance()->GetState() == 2)
-	//{
-	//	char* text = (char*)m_tileIndex;
-	//	Network::GetInstance()->SendText(text);
-	//}
 	m_TileValue = (TileValue)Network::GetInstance()->GetTileValue(m_tileIndex);
+	return isClicked;
 }
 void Tile::Shutdown()
 {

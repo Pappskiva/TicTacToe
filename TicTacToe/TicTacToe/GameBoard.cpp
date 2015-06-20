@@ -1,5 +1,6 @@
 #include "GameBoard.h"
 #include "Tile.h"
+#include "Network.h"
 
 GameBoard::GameBoard(){}
 GameBoard::~GameBoard(){}
@@ -33,6 +34,7 @@ void GameBoard::Initialize()
 	m_Tile9->Initialize(210, 210,9);
 	m_Background = NULL;
 	m_Background = SDL_LoadBMP("TicTactoeGrid.bmp");
+	m_selectedTile = NULL;
 }
 bool GameBoard::Update(SDL_Surface* p_screen, SDL_Event* p_e)
 {
@@ -41,15 +43,17 @@ bool GameBoard::Update(SDL_Surface* p_screen, SDL_Event* p_e)
 	//	m_Tiles[i].Update();
 	//}
 	SDL_BlitSurface(m_Background, NULL, p_screen, NULL);
-	m_Tile1->Update(p_screen, p_e);
-	m_Tile2->Update(p_screen, p_e);
-	m_Tile3->Update(p_screen, p_e);
-	m_Tile4->Update(p_screen, p_e);
-	m_Tile5->Update(p_screen, p_e);
-	m_Tile6->Update(p_screen, p_e);
-	m_Tile7->Update(p_screen, p_e);
-	m_Tile8->Update(p_screen, p_e);
-	m_Tile9->Update(p_screen, p_e);
+	
+
+	TileClickCheck(m_Tile1, p_screen, p_e);
+	TileClickCheck(m_Tile2, p_screen, p_e);
+	TileClickCheck(m_Tile3, p_screen, p_e);
+	TileClickCheck(m_Tile4, p_screen, p_e);
+	TileClickCheck(m_Tile5, p_screen, p_e);
+	TileClickCheck(m_Tile6, p_screen, p_e);
+	TileClickCheck(m_Tile7, p_screen, p_e);
+	TileClickCheck(m_Tile8, p_screen, p_e);
+	TileClickCheck(m_Tile9, p_screen, p_e);
 	return true;
 }
 void GameBoard::Shutdown()
@@ -78,4 +82,35 @@ void GameBoard::Shutdown()
 	delete m_Tile8;
 	delete m_Tile9;
 	SDL_FreeSurface(m_Background);
+}
+void GameBoard::TileClickCheck(Tile *p_tile, SDL_Surface* p_screen, SDL_Event* p_e)
+{
+	if (p_tile->Update(p_screen, p_e))
+	{
+		if (Network::GetInstance()->GetNumberOfPlacedTiles() == 3)
+		{
+
+			if (m_selectedTile == NULL)
+			{
+				if (p_tile->GetTileValue() == (Network::GetInstance()->GetState()-1))
+				{
+					m_selectedTile = p_tile;
+				}
+			}
+			else
+			{
+				if (p_tile->GetTileValue() == 2)
+				{
+					Network::GetInstance()->MoveTile(m_selectedTile->GetTileIndex(), p_tile->GetTileIndex());
+					Network::GetInstance()->SendTable();
+				}
+				m_selectedTile = NULL;
+			}
+		}
+		else if (p_tile->GetTileValue() == 2)
+		{
+			Network::GetInstance()->SetTile(p_tile->GetTileIndex());
+			Network::GetInstance()->SendTable();
+		}
+	}
 }
