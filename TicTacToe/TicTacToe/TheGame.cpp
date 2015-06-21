@@ -44,6 +44,11 @@ bool TheGame::Update()
 	if (Network::GetInstance()->GetState() != 0)
 	{
 		m_GameBoard->Update(m_screen, &e);
+		if (Network::GetInstance()->StartDisconnect())
+		{
+			///BILD?
+			Network::GetInstance()->Shutdown();
+		}
 	}
 
 	if (m_ExitButton->IsClicked(m_screen, &e))
@@ -61,7 +66,6 @@ bool TheGame::Update()
 		{
 			Network::GetInstance()->InitializeClient();
 		}
-		
 	}
 	else
 	{

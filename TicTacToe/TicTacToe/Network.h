@@ -24,6 +24,7 @@ public:
 	int GetNumberOfPlacedTiles();
 	void MoveTile(int p_selectedTileIndex, int p_destinationTileIndex);
 	bool MyTurn();
+	bool StartDisconnect();
 
 private:
 	Network();
@@ -52,5 +53,6 @@ private:
 	int m_whooseTurn;
 
 	int test;
+	bool m_disconnect;
 };
 

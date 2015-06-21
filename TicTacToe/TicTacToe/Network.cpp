@@ -19,6 +19,7 @@ Network* Network::GetInstance()
 }
 void Network::InitializeHost()
 {
+	m_disconnect = false;
 	test = 0;
 	m_whooseTurn = 0;
 	int iResult;
@@ -152,6 +153,7 @@ void Network::InitializeHost()
 }
 void Network::InitializeClient()
 {
+	m_disconnect = false;
 	test = 0;
 	m_whooseTurn = 0;
 	int iResult;
@@ -319,6 +321,7 @@ void Network::Shutdown()
 }
 void Network::Disconnect()
 {
+	SendText("33333333333");
 	if (m_hostIsInitialized)
 	{
 		// shutdown the send half of the connection since no more data will be sent
@@ -589,7 +592,10 @@ void Network::HandleServerMessage(char p_message[])
 			}
 
 			break;
-		case '2':
+		case '2'://Someone won
+			break;
+		case '3'://Disconnect
+			m_disconnect = true;
 			break;
 		default:
 			printf("Not a message\n");
@@ -622,8 +628,10 @@ void Network::HandleServerMessage(char p_message[])
 				m_whooseTurn = 0;
 			}
 			break;
-		case '2':
+		case '2'://Someone won
 			break;
+		case '3'://Disconnect
+			m_disconnect = true;
 		default:
 			printf("Not a message\n");
 			break;
@@ -675,4 +683,8 @@ bool Network::MyTurn()
 		return true;
 	}
 	return false;
+}
+bool Network::StartDisconnect()
+{
+	return m_disconnect;
 }
