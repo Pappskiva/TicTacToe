@@ -25,6 +25,7 @@ public:
 	void MoveTile(int p_selectedTileIndex, int p_destinationTileIndex);
 	bool MyTurn();
 	bool StartDisconnect();
+	int VictoryState();
 
 private:
 	Network();
@@ -54,5 +55,6 @@ private:
 
 	int test;
 	bool m_disconnect;
+	int m_victory;
 };
 

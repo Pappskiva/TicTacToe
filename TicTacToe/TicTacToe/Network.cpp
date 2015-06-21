@@ -21,6 +21,7 @@ void Network::InitializeHost()
 {
 	m_disconnect = false;
 	test = 0;
+	m_victory = 2;
 	m_whooseTurn = 0;
 	int iResult;
 	printf("This is the host\n");
@@ -154,6 +155,7 @@ void Network::InitializeHost()
 void Network::InitializeClient()
 {
 	m_disconnect = false;
+	m_victory = 2;
 	test = 0;
 	m_whooseTurn = 0;
 	int iResult;
@@ -456,14 +458,12 @@ void Network::CheckForVictory()
 		if (tile1.xPos == tile2.xPos && tile1.xPos == tile3.xPos)
 		{
 			//Win
-			printf("Cross wins... %d\n", test);
-			test++;
+			m_victory = 1;
 		}
 		else if (tile1.yPos == tile2.yPos && tile1.yPos == tile3.yPos)
 		{
 			//Win
-			printf("Cross wins... %d\n", test);
-			test++;
+			m_victory = 1;
 		}
 		else if (tile2.xPos == 1 && tile2.yPos == 1 && tile1.yPos == 0 && tile3.yPos == 2)
 		{
@@ -472,8 +472,7 @@ void Network::CheckForVictory()
 				if (tile3.xPos == 2)
 				{
 					//Win
-					printf("Cross wins... %d\n", test);
-					test++;
+					m_victory = 1;
 				}
 			}
 			if (tile1.xPos == 2)
@@ -481,8 +480,7 @@ void Network::CheckForVictory()
 				if (tile3.xPos == 0)
 				{
 					//Win
-					printf("Cross wins... %d\n", test);
-					test++;
+					m_victory = 1;
 				}
 			}
 		}
@@ -517,14 +515,12 @@ void Network::CheckForVictory()
 		if (tile1.xPos == tile2.xPos && tile1.xPos == tile3.xPos)
 		{
 			//Win
-			printf("Circle wins... %d\n", test);
-			test++;
+			m_victory = 0;
 		}
 		else if (tile1.yPos == tile2.yPos && tile1.yPos == tile3.yPos)
 		{
 			//Win
-			printf("Circle wins... %d\n", test);
-			test++;
+			m_victory = 0;
 		}
 		else if (tile2.xPos == 1 && tile2.yPos == 1 && tile1.yPos == 0 && tile3.yPos == 2)
 		{
@@ -533,8 +529,7 @@ void Network::CheckForVictory()
 				if (tile3.xPos == 2)
 				{
 					//Win
-					printf("Circle wins... %d\n", test);
-					test++;
+					m_victory = 0;
 				}
 			}
 			if (tile1.xPos == 2)
@@ -542,11 +537,18 @@ void Network::CheckForVictory()
 				if (tile3.xPos == 0)
 				{
 					//Win
-					printf("Circle wins... %d\n", test);
-					test++;
+					m_victory = 0;
 				}
 			}
 		}
+	}
+	if (m_victory == 0)
+	{
+		SendText("20000000000");
+	}
+	else if (m_victory == 1)
+	{
+		SendText("21000000000");
 	}
 }
 void Network::SetTile(int p_index)
@@ -593,6 +595,14 @@ void Network::HandleServerMessage(char p_message[])
 
 			break;
 		case '2'://Someone won
+			if (p_message[1] == '0')
+			{//Circle won
+				m_victory = 0;
+			}
+			else if (p_message[1] == '1')
+			{//Cross won
+				m_victory = 1;
+			}
 			break;
 		case '3'://Disconnect
 			m_disconnect = true;
@@ -629,6 +639,14 @@ void Network::HandleServerMessage(char p_message[])
 			}
 			break;
 		case '2'://Someone won
+			if (p_message[1] == '0')
+			{//Circle won
+				m_victory = 0;
+			}
+			else if (p_message[1] == '1')
+			{//Cross won
+				m_victory = 1;
+			}
 			break;
 		case '3'://Disconnect
 			m_disconnect = true;
@@ -687,4 +705,8 @@ bool Network::MyTurn()
 bool Network::StartDisconnect()
 {
 	return m_disconnect;
+}
+int Network::VictoryState()
+{
+	return m_victory;
 }

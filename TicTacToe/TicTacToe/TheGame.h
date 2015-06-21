@@ -18,6 +18,9 @@ private:
 
 	SDL_Surface* m_screen;
 	SDL_Surface* m_backGround;
+	SDL_Surface* m_circleVictorySign;
+	SDL_Surface* m_crossVictorySign;
+	SDL_Rect m_VictorySignRect;
 	
 	GameBoard* m_GameBoard;
 	Button* m_ConnectButton;
