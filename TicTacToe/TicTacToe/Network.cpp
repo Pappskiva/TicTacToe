@@ -349,6 +349,7 @@ void Network::Disconnect()
 		WSACleanup();
 		m_clientIsInitialized = false;
 	}
+
 }
 void Network::SendTable()
 {

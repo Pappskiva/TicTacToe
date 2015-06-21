@@ -9,6 +9,8 @@ void TheGame::Initialize()
 {
 	m_screen = NULL;
 	m_screen = SDL_SetVideoMode(415, 310, 32, SDL_SWSURFACE);
+	m_backGround = NULL;
+	m_backGround = SDL_LoadBMP("Background.bmp");
 	m_exit = false;
 
 	m_GameBoard = new GameBoard();
@@ -18,10 +20,10 @@ void TheGame::Initialize()
 	m_DisconnectButton = new Button();
 	m_ExitButton = new Button();
 	m_HostButton = new Button();
-	m_ConnectButton->Initialize("Button_Connect.bmp",315,0);
+	m_ConnectButton->Initialize("Button_Connect.bmp", 315, 0);
 	m_HostButton->Initialize("Button_Host.bmp", 315, 105);
 	m_ExitButton->Initialize("Button_Exit.bmp", 315, 210);
-	m_DisconnectButton->Initialize("Button_Disconnect.bmp", 315, 105);
+	m_DisconnectButton->Initialize("Button_Disconnect.bmp", 315, 0, true);
 }
 bool TheGame::Update()
 {
@@ -36,28 +38,8 @@ bool TheGame::Update()
 			m_exit = true;
 		}
 	}
-	//char *test;
-	//test = "0123456789";
 
-	//char test2[10];
-	//test2[0] = 9;
-	//test2[1] = 8;
-	//test2[2] = 7;
-	//test2[3] = 6;
-	//test2[4] = 5;
-	//test2[5] = 4;
-	//test2[6] = 3;
-	//test2[7] = 2;
-	//test2[8] = 1;
-	//test2[9] = 0;
-	//int a = 0;
-	//std::strcpy(test2, test);
-	//for (unsigned int i = 0; i < 10; i++)
-	//{
-	//	printf("&d\n", test2[i]);
-	//}
-
-
+	SDL_BlitSurface(m_backGround, NULL, m_screen, NULL);
 	Network::GetInstance()->Update();
 	if (Network::GetInstance()->GetState() != 0)
 	{
@@ -69,13 +51,24 @@ bool TheGame::Update()
 		m_exit = true;
 	}
 
-	if (m_HostButton->IsClicked(m_screen, &e))
+	if (Network::GetInstance()->GetState() == 0)
 	{
-		Network::GetInstance()->InitializeHost();
+		if (m_HostButton->IsClicked(m_screen, &e))
+		{
+			Network::GetInstance()->InitializeHost();
+		}
+		else if (m_ConnectButton->IsClicked(m_screen, &e))
+		{
+			Network::GetInstance()->InitializeClient();
+		}
+		
 	}
-	else if (m_ConnectButton->IsClicked(m_screen, &e))
+	else
 	{
-		Network::GetInstance()->InitializeClient();
+		if (m_DisconnectButton->IsClicked(m_screen, &e))
+		{
+			Network::GetInstance()->Shutdown();
+		}
 	}
 
 	SDL_Flip(m_screen);
@@ -84,6 +77,7 @@ bool TheGame::Update()
 void TheGame::Shutdown()
 {
 	SDL_FreeSurface(m_screen);
+	SDL_FreeSurface(m_backGround);
 	m_GameBoard->Shutdown();
 	delete m_GameBoard;
 
