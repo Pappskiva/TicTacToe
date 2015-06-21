@@ -95,6 +95,7 @@ void GameBoard::TileClickCheck(Tile *p_tile, SDL_Surface* p_screen, SDL_Event* p
 				if (p_tile->GetTileValue() == (Network::GetInstance()->GetState()-1))
 				{
 					m_selectedTile = p_tile;
+					m_selectedTile->SetIfSelected(true);
 				}
 			}
 			else
@@ -104,6 +105,7 @@ void GameBoard::TileClickCheck(Tile *p_tile, SDL_Surface* p_screen, SDL_Event* p
 					Network::GetInstance()->MoveTile(m_selectedTile->GetTileIndex(), p_tile->GetTileIndex());
 					Network::GetInstance()->SendTable();
 				}
+				m_selectedTile->SetIfSelected(false);
 				m_selectedTile = NULL;
 			}
 		}
