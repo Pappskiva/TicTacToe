@@ -63,16 +63,16 @@ bool TheGame::Update()
 	{
 		m_exit = true;
 	}
-
+	char* ip = "192.168.0.101";
 	if (Network::GetInstance()->GetState() == 0)
 	{
 		if (m_HostButton->IsClicked(m_screen, &e))
 		{
-			Network::GetInstance()->InitializeHost();
+			Network::GetInstance()->InitializeHost("27015", ip);
 		}
 		else if (m_ConnectButton->IsClicked(m_screen, &e))
 		{
-			Network::GetInstance()->InitializeClient();
+			Network::GetInstance()->InitializeClient("27015", ip);
 		}
 	}
 	else

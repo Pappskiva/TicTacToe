@@ -1,6 +1,7 @@
+#define  _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "Network.h"
 #include <iostream>
-#define DEFAULT_PORT "27015"
+
 #define DEFAULT_BUFLEN 11
 Network* Network::m_instance;
 Network::Network()
@@ -17,8 +18,43 @@ Network* Network::GetInstance()
 	}
 	return m_instance;
 }
-void Network::InitializeHost()
+
+void Network::print_adapter(PIP_ADAPTER_ADDRESSES aa)
 {
+	char buf[BUFSIZ];
+	memset(buf, 0, BUFSIZ);
+	WideCharToMultiByte(CP_ACP, 0, aa->FriendlyName, wcslen(aa->FriendlyName), buf, BUFSIZ, NULL, NULL);
+	printf("adapter_name:%s\n", buf);
+}
+
+void Network::print_addr(PIP_ADAPTER_UNICAST_ADDRESS ua)
+{
+	char buf[BUFSIZ];
+
+	int family = ua->Address.lpSockaddr->sa_family;
+	if (family == AF_INET)
+	{
+		printf("\t%s ", family == AF_INET ? "IPv4" : "IPv6");
+
+		memset(buf, 0, BUFSIZ);
+		getnameinfo(ua->Address.lpSockaddr, ua->Address.iSockaddrLength, buf, sizeof(buf), NULL, 0, NI_NUMERICHOST);
+		printf("%s\n", buf);
+		if (!m_savedIp)
+		{
+			//m_ip = buf;
+			for (int i = 0; i < BUFSIZ; i++)
+			{
+				m_ip[i] = buf[i];
+			}
+			m_savedIp = true;
+		}
+	}
+}
+
+
+void Network::InitializeHost(char* p_port, char* p_ip)
+{
+	m_savedIp = false;
 	m_disconnect = false;
 	test = 0;
 	m_victory = 2;
@@ -52,7 +88,7 @@ void Network::InitializeHost()
 	hints.ai_flags = AI_PASSIVE;
 
 	// Resolve the local address and port to be used by the server
-	iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
+	iResult = getaddrinfo(NULL, p_port, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed: %d\n", iResult);
 		WSACleanup();
@@ -65,9 +101,8 @@ void Network::InitializeHost()
 
 
 	SOCKET ListenSocket = INVALID_SOCKET;
-
+	
 	// Create a SOCKET for the server to listen for client connections
-
 	ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
 
 	if (ListenSocket == INVALID_SOCKET) {
@@ -80,7 +115,6 @@ void Network::InitializeHost()
 	{
 		printf("Host initialized socket\n");
 	}
-
 	// Setup the TCP listening socket
 		iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
 	if (iResult == SOCKET_ERROR) {
@@ -104,9 +138,54 @@ void Network::InitializeHost()
 		WSACleanup();
 		return;
 	}
+	
+	// Get host ip here
+	DWORD rv, size;
+	PIP_ADAPTER_ADDRESSES adapter_addresses, aa;
+	PIP_ADAPTER_UNICAST_ADDRESS ua;
 
-	ClientSocket = INVALID_SOCKET;
+	rv = GetAdaptersAddresses(AF_UNSPEC, GAA_FLAG_INCLUDE_PREFIX, NULL, NULL, &size);
+	if (rv != ERROR_BUFFER_OVERFLOW) {
+		fprintf(stderr, "GetAdaptersAddresses() failed...");
+		return;
+	}
+	adapter_addresses = (PIP_ADAPTER_ADDRESSES)malloc(size);
 
+	rv = GetAdaptersAddresses(AF_UNSPEC, GAA_FLAG_INCLUDE_PREFIX, NULL, adapter_addresses, &size);
+	if (rv != ERROR_SUCCESS) {
+		fprintf(stderr, "GetAdaptersAddresses() failed...");
+		free(adapter_addresses);
+		return;
+	}
+	for (aa = adapter_addresses; aa != NULL; aa = aa->Next) {
+		//print_adapter(aa);
+		for (ua = aa->FirstUnicastAddress; ua != NULL; ua = ua->Next) {
+			print_addr(ua);
+		}
+	}
+	free(adapter_addresses);
+	// Get host ip hereBB
+
+	printf("%s\n", m_ip);
+	
+
+	//USHORT port = 27015;
+	//SOCKADDR_IN temp;
+	//temp.sin_family = AF_INET;
+	//temp.sin_port = htons(port);
+	//temp.sin_addr.s_addr = inet_addr("127.0.0.1");
+	//int len = sizeof(temp);
+	//int tt = getsockname(ListenSocket, (SOCKADDR*)&temp, &len);
+	//if ( tt == -1)
+	//{
+	//	int errorcode = WSAGetLastError();
+	//	int i = 0;
+	//}
+	//else
+	//{
+	//	printf("Client: Receiver IP(s) used: %s\n", inet_ntoa(temp.sin_addr));
+	//	printf("Client: Receiver port used: %d\n", htons(temp.sin_port));
+	//}
 	// Accept a client socket
 	ClientSocket = accept(ListenSocket, NULL, NULL);
 	if (ClientSocket == INVALID_SOCKET) {
@@ -152,7 +231,7 @@ void Network::InitializeHost()
 	m_tableLayout[8].yPos = 2;
 	printf("Initialized Table Layout\n");
 }
-void Network::InitializeClient()
+void Network::InitializeClient(char* p_port, char* p_ip)
 {
 	m_disconnect = false;
 	m_victory = 2;
@@ -186,8 +265,7 @@ void Network::InitializeClient()
 	hints.ai_protocol = IPPROTO_TCP;
 
 	// Resolve the server address and port
-	char* ipAdress = "127.0.0.1";
-	iResult = getaddrinfo(ipAdress, DEFAULT_PORT, &hints, &result);
+	iResult = getaddrinfo(p_ip, p_port, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed: %d\n", iResult);
 		WSACleanup();

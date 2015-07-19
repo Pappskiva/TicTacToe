@@ -7,12 +7,15 @@
 #include <iphlpapi.h>
 
 #pragma comment(lib, "Ws2_32.lib")
+
+#include <stdio.h>
+#pragma comment(lib, "iphlpapi.lib")
 class Network
 {
 public:
 	static Network* GetInstance();
-	void InitializeHost();
-	void InitializeClient();
+	void InitializeHost(char* p_port, char* p_ip);
+	void InitializeClient(char* p_port, char* p_ip);
 	void Update();
 	void Shutdown();
 	void Disconnect();
@@ -32,6 +35,9 @@ private:
 	~Network();
 	void CheckForVictory();
 	void HandleServerMessage(char p_message[]);
+
+	void print_adapter(PIP_ADAPTER_ADDRESSES aa);
+	void print_addr(PIP_ADAPTER_UNICAST_ADDRESS ua);
 
 	static Network* m_instance;
 	bool m_hostIsInitialized;
@@ -56,5 +62,7 @@ private:
 	int test;
 	bool m_disconnect;
 	int m_victory;
+	char m_ip[BUFSIZ];
+	bool m_savedIp;
 };
 
