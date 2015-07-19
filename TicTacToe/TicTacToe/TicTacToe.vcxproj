@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Pappskiva\Documents\GitHub\TicTacToe\TicTacToe\TicTacToe\SDL-1.2.15\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Pappskiva\Documents\GitHub\TicTacToe\TicTacToe\TicTacToe\SDL-1.2.15\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\TicTacToe\SDL-1.2.15\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\TicTacToe\SDL-1.2.15\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
