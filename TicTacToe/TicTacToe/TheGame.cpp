@@ -81,7 +81,8 @@ bool TheGame::Update()
 	{
 		m_exit = true;
 	}
-	char* ip = "192.168.0.101";
+	//char* ip = "192.168.0.101";//Laptop
+	char* ip = "169.254.80.80";//Desktop
 	if (Network::GetInstance()->GetState() == 0)
 	{
 		if (m_HostButton->IsClicked(m_screen, &e))
