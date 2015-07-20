@@ -7,12 +7,18 @@ TextRenderer::TextRenderer(){}
 TextRenderer::~TextRenderer(){}
 void TextRenderer::Initialize()
 {
-	//Open the font
-	//m_font = TTF_OpenFont("16_true_type_fonts/lazy.ttf", 28);
-	//if (m_font == NULL)
-	//{
-	//	printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
-	//}
+	//////Open the font
+
+	//int h = 9;
+	if (TTF_Init() == -1)
+	{
+		printf("Failed to init TTF");
+	}
+	m_font = TTF_OpenFont("16_true_type_fonts/lazy.ttf", 28);
+	if (m_font == NULL)
+	{
+		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+	}
 	//else
 	//{
 	//	//Render text

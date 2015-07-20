@@ -41,13 +41,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\TicTacToe\SDL2_image-2.0.0\include;..\TicTacToe\SDL2_ttf-2.0.12\include;..\TicTacToe\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\TicTacToe\SDL2_image-2.0.0\lib\x86;..\TicTacToe\SDL2_ttf-2.0.12\lib\x86;C:\Users\Alexander\Documents\GitHub\TicTacToe\TicTacToe\TicTacToe\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\TicTacToe\SDL2_ttf-2.0.12\include;..\TicTacToe\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\TicTacToe\SDL2_ttf-2.0.12\lib\x86;..\TicTacToe\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\TicTacToe\SDL2_image-2.0.0\include;..\TicTacToe\SDL2_ttf-2.0.12\include;..\TicTacToe\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\TicTacToe\SDL2_image-2.0.0\lib\x86;..\TicTacToe\SDL2_ttf-2.0.12\lib\x86;C:\Users\Alexander\Documents\GitHub\TicTacToe\TicTacToe\TicTacToe\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\TicTacToe\SDL2_ttf-2.0.12\include;..\TicTacToe\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\TicTacToe\SDL2_ttf-2.0.12\lib\x86;..\TicTacToe\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

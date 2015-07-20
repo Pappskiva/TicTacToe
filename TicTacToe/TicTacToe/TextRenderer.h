@@ -4,6 +4,7 @@
 #include <string>
 //#include <SDL_ttf.h>
 #include "SDL_ttf.h"
+//#include "SDL2_ttf-2.0.12\include\SDL_ttf.h"
 class TextRenderer
 {
 public:

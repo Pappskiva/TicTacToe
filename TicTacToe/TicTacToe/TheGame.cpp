@@ -2,7 +2,6 @@
 #include "GameBoard.h"
 #include "Network.h"
 #include "Button.h"
-#include "TextRenderer.h"
 
 TheGame::TheGame(){}
 TheGame::~TheGame(){}
@@ -46,8 +45,8 @@ void TheGame::Initialize()
 	m_ExitButton->Initialize("Button_Exit.bmp", 315, 210);
 	m_DisconnectButton->Initialize("Button_Disconnect.bmp", 315, 0, true);
 
-	m_textRenderer = new TextRenderer();
-	m_textRenderer->Initialize();
+	//m_textRenderer = new TextRenderer();
+	m_textRenderer.Initialize();
 }
 bool TheGame::Update()
 {
@@ -130,11 +129,11 @@ void TheGame::Shutdown()
 	m_DisconnectButton->Shutdown();
 	m_ExitButton->Shutdown();
 	m_HostButton->Shutdown();
-	m_textRenderer->Shutdown();
+	m_textRenderer.Shutdown();
 	delete m_ConnectButton;
 	delete m_DisconnectButton;
 	delete m_ExitButton;
 	delete m_HostButton;
-	delete m_textRenderer;
+	//delete m_textRenderer;
 	SDL_DestroyWindow(m_window);
 }

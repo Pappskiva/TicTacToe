@@ -1,9 +1,9 @@
 #pragma once
 
 #include "SDL.h"
+#include "TextRenderer.h"
 class GameBoard;
 class Button;
-class TextRenderer;
 
 class TheGame
 {
@@ -29,6 +29,6 @@ private:
 	Button* m_ExitButton;
 	Button* m_HostButton;
 	Button* m_DisconnectButton;
-	TextRenderer* m_textRenderer;
+	TextRenderer m_textRenderer;
 };
 
