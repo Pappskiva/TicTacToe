@@ -5,16 +5,19 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
+#include "SDL.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 
 #include <stdio.h>
 #pragma comment(lib, "iphlpapi.lib")
+
+class TextRenderer;
 class Network
 {
 public:
 	static Network* GetInstance();
-	void InitializeHost(char* p_port, char* p_ip);
+	void InitializeHost(char* p_port, SDL_Window* p_window, SDL_Surface* p_screen,TextRenderer *p_textRenderer);
 	void InitializeClient(char* p_port, char* p_ip);
 	void Update();
 	void Shutdown();

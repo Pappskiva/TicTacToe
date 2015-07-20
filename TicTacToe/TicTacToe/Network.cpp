@@ -1,6 +1,7 @@
 #define  _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "Network.h"
 #include <iostream>
+#include "TextRenderer.h"
 
 #define DEFAULT_BUFLEN 11
 Network* Network::m_instance;
@@ -34,11 +35,11 @@ void Network::print_addr(PIP_ADAPTER_UNICAST_ADDRESS ua)
 	int family = ua->Address.lpSockaddr->sa_family;
 	if (family == AF_INET)
 	{
-		printf("\t%s ", family == AF_INET ? "IPv4" : "IPv6");
+		//printf("\t%s ", family == AF_INET ? "IPv4" : "IPv6");
 
 		memset(buf, 0, BUFSIZ);
 		getnameinfo(ua->Address.lpSockaddr, ua->Address.iSockaddrLength, buf, sizeof(buf), NULL, 0, NI_NUMERICHOST);
-		printf("%s\n", buf);
+		//printf("%s\n", buf);
 		if (!m_savedIp)
 		{
 			//m_ip = buf;
@@ -51,8 +52,7 @@ void Network::print_addr(PIP_ADAPTER_UNICAST_ADDRESS ua)
 	}
 }
 
-
-void Network::InitializeHost(char* p_port, char* p_ip)
+void Network::InitializeHost(char* p_port, SDL_Window* p_window, SDL_Surface* p_screen, TextRenderer *p_textRenderer)
 {
 	m_savedIp = false;
 	m_disconnect = false;
@@ -131,7 +131,6 @@ void Network::InitializeHost(char* p_port, char* p_ip)
 
 	freeaddrinfo(result);
 
-
 	if (listen(ListenSocket, SOMAXCONN) == SOCKET_ERROR) {
 		printf("Listen failed with error: %ld\n", WSAGetLastError());
 		closesocket(ListenSocket);
@@ -168,6 +167,10 @@ void Network::InitializeHost(char* p_port, char* p_ip)
 
 	printf("%s\n", m_ip);
 	
+
+	p_textRenderer->PrintIp(p_window, m_ip, p_port,p_screen);
+	///////////Sleep 2 second
+
 
 	//USHORT port = 27015;
 	//SOCKADDR_IN temp;

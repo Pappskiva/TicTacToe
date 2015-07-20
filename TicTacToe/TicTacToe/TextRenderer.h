@@ -2,9 +2,7 @@
 
 #include "SDL.h"
 #include <string>
-//#include <SDL_ttf.h>
 #include "SDL_ttf.h"
-//#include "SDL2_ttf-2.0.12\include\SDL_ttf.h"
 class TextRenderer
 {
 public:
@@ -13,6 +11,7 @@ public:
 
 	void Initialize();
 	void Update(bool p_writable, std::string p_text, SDL_Surface* p_screen);
+	void PrintIp(SDL_Window* p_window, std::string p_text, std::string p_port, SDL_Surface* p_screen);
 	void Shutdown();
 
 

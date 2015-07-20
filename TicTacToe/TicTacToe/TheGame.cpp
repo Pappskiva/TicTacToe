@@ -86,7 +86,7 @@ bool TheGame::Update()
 	{
 		if (m_HostButton->IsClicked(m_screen, &e))
 		{
-			Network::GetInstance()->InitializeHost("27015", ip);
+			Network::GetInstance()->InitializeHost("27015", m_window, m_screen, &m_textRenderer);
 		}
 		else if (m_ConnectButton->IsClicked(m_screen, &e))
 		{
