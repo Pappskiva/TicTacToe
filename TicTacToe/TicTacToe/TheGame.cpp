@@ -2,13 +2,28 @@
 #include "GameBoard.h"
 #include "Network.h"
 #include "Button.h"
+#include "TextRenderer.h"
 
 TheGame::TheGame(){}
 TheGame::~TheGame(){}
 void TheGame::Initialize()
 {
 	m_screen = NULL;
-	m_screen = SDL_SetVideoMode(415, 415, 32, SDL_SWSURFACE);
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	{
+		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		return;
+	}
+	m_window = SDL_CreateWindow("TicTacToe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 415, 415, SDL_SWSURFACE);
+	if (m_window == NULL)
+	{
+		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+	}
+	else
+	{
+		//Get window surface
+		m_screen = SDL_GetWindowSurface(m_window);
+	}
 	m_backGround = NULL;
 	m_backGround = SDL_LoadBMP("Background.bmp");
 	m_circleVictorySign = NULL;
@@ -30,6 +45,9 @@ void TheGame::Initialize()
 	m_HostButton->Initialize("Button_Host.bmp", 315, 105);
 	m_ExitButton->Initialize("Button_Exit.bmp", 315, 210);
 	m_DisconnectButton->Initialize("Button_Disconnect.bmp", 315, 0, true);
+
+	m_textRenderer = new TextRenderer();
+	m_textRenderer->Initialize();
 }
 bool TheGame::Update()
 {
@@ -89,7 +107,7 @@ bool TheGame::Update()
 	else if (Network::GetInstance()->VictoryState() == 1)
 		SDL_BlitSurface(m_crossVictorySign, NULL, m_screen, &m_VictorySignRect);
 
-	SDL_Flip(m_screen);
+	SDL_UpdateWindowSurface(m_window);
 	if (m_exit)
 	{
 		Network::GetInstance()->Shutdown();
@@ -111,8 +129,11 @@ void TheGame::Shutdown()
 	m_DisconnectButton->Shutdown();
 	m_ExitButton->Shutdown();
 	m_HostButton->Shutdown();
+	m_textRenderer->Shutdown();
 	delete m_ConnectButton;
 	delete m_DisconnectButton;
 	delete m_ExitButton;
 	delete m_HostButton;
+	delete m_textRenderer;
+	SDL_DestroyWindow(m_window);
 }

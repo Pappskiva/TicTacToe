@@ -41,13 +41,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\TicTacToe\SDL-1.2.15\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\TicTacToe\SDL-1.2.15\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\TicTacToe\SDL2_image-2.0.0\include;..\TicTacToe\SDL2_ttf-2.0.12\include;..\TicTacToe\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\TicTacToe\SDL2_image-2.0.0\lib\x86;..\TicTacToe\SDL2_ttf-2.0.12\lib\x86;C:\Users\Alexander\Documents\GitHub\TicTacToe\TicTacToe\TicTacToe\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\Pappskiva\Documents\GitHub\TicTacToe\TicTacToe\TicTacToe\SDL-1.2.15\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Pappskiva\Documents\GitHub\TicTacToe\TicTacToe\TicTacToe\SDL-1.2.15\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\TicTacToe\SDL2_image-2.0.0\include;..\TicTacToe\SDL2_ttf-2.0.12\include;..\TicTacToe\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\TicTacToe\SDL2_image-2.0.0\lib\x86;..\TicTacToe\SDL2_ttf-2.0.12\lib\x86;C:\Users\Alexander\Documents\GitHub\TicTacToe\TicTacToe\TicTacToe\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -62,7 +62,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL.lib;SDLmain.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -81,7 +81,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>SDL.lib;SDLmain.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -89,6 +89,7 @@
     <ClCompile Include="GameBoard.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Network.cpp" />
+    <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="TheGame.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
@@ -96,6 +97,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="GameBoard.h" />
     <ClInclude Include="Network.h" />
+    <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="TheGame.h" />
     <ClInclude Include="Tile.h" />
   </ItemGroup>

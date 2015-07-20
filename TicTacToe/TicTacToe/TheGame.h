@@ -3,6 +3,7 @@
 #include "SDL.h"
 class GameBoard;
 class Button;
+class TextRenderer;
 
 class TheGame
 {
@@ -16,6 +17,7 @@ public:
 private:
 	bool m_exit;
 
+	SDL_Window* m_window;
 	SDL_Surface* m_screen;
 	SDL_Surface* m_backGround;
 	SDL_Surface* m_circleVictorySign;
@@ -27,5 +29,6 @@ private:
 	Button* m_ExitButton;
 	Button* m_HostButton;
 	Button* m_DisconnectButton;
+	TextRenderer* m_textRenderer;
 };
 

@@ -13,6 +13,7 @@ void Button::Initialize(char* p_texture, int p_xPos, int p_yPos)
 	m_xMax = p_xPos + 100;
 	m_yMin = p_yPos;
 	m_yMax = p_yPos + 100;
+	
 }
 void Button::Initialize(char* p_texture, int p_xPos, int p_yPos, bool p_bigButton)
 {
