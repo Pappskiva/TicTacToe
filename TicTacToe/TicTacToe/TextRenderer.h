@@ -21,6 +21,7 @@ private:
 	TTF_Font* m_font;
 	SDL_Surface* m_texture;
 	SDL_Rect m_rect;
+	std::string m_ipString;
 
 };
 
