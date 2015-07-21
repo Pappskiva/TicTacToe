@@ -19,8 +19,10 @@ void TextRenderer::Initialize()
 }
 std::string TextRenderer::GetIpFromPlayer(SDL_Window* p_window, SDL_Surface* p_screen, bool p_isIp)
 {
+	SDL_StartTextInput();
 	std::string returnString = "";
 	std::string preText;
+	bool textFinished = false;
 	int yPos;
 	if (p_isIp)
 	{
@@ -33,7 +35,7 @@ std::string TextRenderer::GetIpFromPlayer(SDL_Window* p_window, SDL_Surface* p_s
 		yPos = 50;
 	}
 
-	while (true)
+	while (!textFinished)
 	{
 
 	}
