@@ -18,7 +18,7 @@ class Network
 public:
 	static Network* GetInstance();
 	void InitializeHost(char* p_port, SDL_Window* p_window, SDL_Surface* p_screen,TextRenderer *p_textRenderer);
-	void InitializeClient(char* p_port, char* p_ip);
+	void InitializeClient(const char* p_port, const char* p_ip);
 	void Update();
 	void Shutdown();
 	void Disconnect();

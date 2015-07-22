@@ -90,7 +90,10 @@ bool TheGame::Update()
 		}
 		else if (m_ConnectButton->IsClicked(m_screen, &e))
 		{
-			Network::GetInstance()->InitializeClient("27015", ip);
+			const char* connectIp = m_textRenderer.GetIpFromPlayer(m_window, m_screen, true).c_str();
+			const char* connectPort = m_textRenderer.GetIpFromPlayer(m_window, m_screen, false).c_str();
+			Network::GetInstance()->InitializeClient(connectIp, connectPort);
+			//Network::GetInstance()->InitializeClient("27015", ip);
 		}
 	}
 	else

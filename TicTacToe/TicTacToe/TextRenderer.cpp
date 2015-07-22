@@ -24,6 +24,7 @@ std::string TextRenderer::GetIpFromPlayer(SDL_Window* p_window, SDL_Surface* p_s
 	std::string preText;
 	bool textFinished = false;
 	int yPos;
+	SDL_Event e;
 	if (p_isIp)
 	{
 		 preText = "Ip: ";
@@ -35,13 +36,48 @@ std::string TextRenderer::GetIpFromPlayer(SDL_Window* p_window, SDL_Surface* p_s
 		yPos = 50;
 	}
 
+	PrintText(yPos, p_window, preText, p_screen);
 	while (!textFinished)
 	{
-
+		bool renderText = false;
+		while (SDL_PollEvent(&e) != 0)
+		{
+			if (e.type == SDL_QUIT)
+			{
+				textFinished = true;
+			}
+			else if (e.type == SDL_KEYDOWN)
+			{
+				if (e.key.keysym.sym == SDLK_KP_ENTER)
+				{
+					textFinished = true;
+					renderText = true;
+				}
+				if (e.key.keysym.sym == SDLK_BACKSPACE && returnString.length() > 0)
+				{
+					returnString.pop_back();
+					renderText = true;
+				}
+			}
+			//Special text input event
+			else if (e.type == SDL_TEXTINPUT)
+			{
+				//Not copy or pasting
+				if (!((e.text.text[0] == 'c' || e.text.text[0] == 'C') && (e.text.text[0] == 'v' || e.text.text[0] == 'V') && SDL_GetModState() & KMOD_CTRL))
+				{
+					//Append character
+					returnString += e.text.text;
+					renderText = true;
+				}
+			}
+			if (renderText)
+			{
+				PrintText(yPos, p_window, (preText + returnString), p_screen);
+			}
+		}
 	}
 
-	PrintText(yPos, p_window, (preText + returnString), p_screen);
-
+	SDL_StopTextInput();
 	return returnString;
 }
 void TextRenderer::PrintIp(SDL_Window* p_window, std::string p_ip, std::string p_port, SDL_Surface* p_screen)
