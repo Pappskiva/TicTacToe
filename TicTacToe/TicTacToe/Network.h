@@ -33,6 +33,7 @@ public:
 	int VictoryState();
 	void SendDisconnectMessage();
 	bool StartDisconnect();
+	int GetWhooseTurn();
 
 private:
 	Network();

@@ -800,3 +800,12 @@ void Network::SendDisconnectMessage()
 {
 	SendText("33333333333");
 }
+
+int Network::GetWhooseTurn()
+{
+	if (GetState() == 0)
+	{
+		return 2;
+	}
+	return m_whooseTurn;
+}

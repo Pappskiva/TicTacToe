@@ -30,6 +30,10 @@ void TheGame::Initialize()
 	m_circleVictorySign = SDL_LoadBMP("CircleVictorySign.bmp");
 	m_crossVictorySign = NULL;
 	m_crossVictorySign = SDL_LoadBMP("CrossVictorySign.bmp");
+	m_circleTurnSign = NULL;
+	m_circleTurnSign = SDL_LoadBMP("CircleTurn.bmp");
+	m_crossTurnSign = NULL;
+	m_crossTurnSign = SDL_LoadBMP("CrossTurn.bmp");
 	m_exit = false;
 	m_VictorySignRect.x = 0;
 	m_VictorySignRect.y = 315;
@@ -78,6 +82,15 @@ bool TheGame::Update()
 		SDL_BlitSurface(m_crossVictorySign, NULL, m_screen, &m_VictorySignRect);
 	else if (Network::GetInstance()->VictoryState() == 0)
 		SDL_BlitSurface(m_circleVictorySign, NULL, m_screen, &m_VictorySignRect);
+
+	if (Network::GetInstance()->GetWhooseTurn() == 0)
+	{
+		SDL_BlitSurface(m_circleTurnSign, NULL, m_screen, &m_VictorySignRect);
+	}
+	else if (Network::GetInstance()->GetWhooseTurn() == 1)
+	{
+		SDL_BlitSurface(m_crossTurnSign, NULL, m_screen, &m_VictorySignRect);
+	}
 
 	SDL_UpdateWindowSurface(m_window);
 	if (Network::GetInstance()->StartDisconnect())
@@ -154,6 +167,8 @@ void TheGame::Shutdown()
 	SDL_FreeSurface(m_backGround);
 	SDL_FreeSurface(m_circleVictorySign);
 	SDL_FreeSurface(m_crossVictorySign);
+	SDL_FreeSurface(m_circleTurnSign);
+	SDL_FreeSurface(m_crossTurnSign);
 	m_GameBoard->Shutdown();
 	delete m_GameBoard;
 
