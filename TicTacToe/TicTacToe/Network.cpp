@@ -234,7 +234,7 @@ void Network::InitializeHost(char* p_port, SDL_Window* p_window, SDL_Surface* p_
 	m_tableLayout[8].yPos = 2;
 	printf("Initialized Table Layout\n");
 }
-void Network::InitializeClient(const char* p_port, const char* p_ip)
+void Network::InitializeClient(char* p_port, char* p_ip)
 {
 	m_disconnect = false;
 	m_victory = 2;

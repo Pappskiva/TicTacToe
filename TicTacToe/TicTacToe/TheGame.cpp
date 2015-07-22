@@ -80,7 +80,7 @@ bool TheGame::Update()
 	{
 		m_exit = true;
 	}
-	//char* ip = "192.168.0.101";//Laptop
+	//char* ip = "169.254.12.164";//Laptop
 	char* ip = "169.254.80.80";//Desktop
 	if (Network::GetInstance()->GetState() == 0)
 	{
@@ -90,10 +90,18 @@ bool TheGame::Update()
 		}
 		else if (m_ConnectButton->IsClicked(m_screen, &e))
 		{
-			const char* connectIp = m_textRenderer.GetIpFromPlayer(m_window, m_screen, true).c_str();
-			const char* connectPort = m_textRenderer.GetIpFromPlayer(m_window, m_screen, false).c_str();
-			Network::GetInstance()->InitializeClient(connectIp, connectPort);
+			std::string ipString = m_textRenderer.GetIpFromPlayer(m_window, m_screen, true);
+			std::string portString = m_textRenderer.GetIpFromPlayer(m_window, m_screen, false);
+
+			char* connectIp = new char[ipString.length() + 1];
+			char* connectPort = new char[portString.length() + 1];
+
+			strcpy(connectIp, ipString.c_str());
+			strcpy(connectPort, portString.c_str());
+			Network::GetInstance()->InitializeClient(connectPort, connectIp);
 			//Network::GetInstance()->InitializeClient("27015", ip);
+			delete connectIp;
+			delete connectPort;
 		}
 	}
 	else
