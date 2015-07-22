@@ -83,14 +83,28 @@ bool TheGame::Update()
 	else if (Network::GetInstance()->VictoryState() == 0)
 		SDL_BlitSurface(m_circleVictorySign, NULL, m_screen, &m_VictorySignRect);
 
-	if (Network::GetInstance()->GetWhooseTurn() == 0)
+	//if (Network::GetInstance()->GetWhooseTurn() == 0)
+	//{
+	//	SDL_BlitSurface(m_circleTurnSign, NULL, m_screen, &m_VictorySignRect);
+	//}
+	//else if (Network::GetInstance()->GetWhooseTurn() == 1)
+	//{
+	//	SDL_BlitSurface(m_crossTurnSign, NULL, m_screen, &m_VictorySignRect);
+	//}
+
+	if (Network::GetInstance()->GetState() != 0)
 	{
-		SDL_BlitSurface(m_circleTurnSign, NULL, m_screen, &m_VictorySignRect);
+		if (Network::GetInstance()->MyTurn())
+		{
+			SDL_BlitSurface(m_circleTurnSign, NULL, m_screen, &m_VictorySignRect);
+		}
+		else
+		{
+			SDL_BlitSurface(m_crossTurnSign, NULL, m_screen, &m_VictorySignRect);
+		}
 	}
-	else if (Network::GetInstance()->GetWhooseTurn() == 1)
-	{
-		SDL_BlitSurface(m_crossTurnSign, NULL, m_screen, &m_VictorySignRect);
-	}
+
+
 
 	SDL_UpdateWindowSurface(m_window);
 	if (Network::GetInstance()->StartDisconnect())
