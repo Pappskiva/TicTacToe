@@ -36,8 +36,6 @@ bool Button::IsClicked(SDL_Surface* p_screen, SDL_Event* p_e)
 		mouseOverTile = true;
 	}
 
-
-
 	SDL_BlitSurface(m_button, NULL, p_screen, &m_buttonRect);
 	if (mouseOverTile)
 	{

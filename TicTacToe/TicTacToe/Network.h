@@ -30,8 +30,9 @@ public:
 	int GetNumberOfPlacedTiles();
 	void MoveTile(int p_selectedTileIndex, int p_destinationTileIndex);
 	bool MyTurn();
-	bool StartDisconnect();
 	int VictoryState();
+	void SendDisconnectMessage();
+	bool StartDisconnect();
 
 private:
 	Network();
@@ -61,8 +62,6 @@ private:
 	tile m_tableLayout[9];
 
 	int m_whooseTurn;
-
-	int test;
 	bool m_disconnect;
 	int m_victory;
 	char m_ip[BUFSIZ];

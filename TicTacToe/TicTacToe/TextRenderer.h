@@ -10,7 +10,7 @@ public:
 	~TextRenderer();
 
 	void Initialize();
-	std::string GetIpFromPlayer(SDL_Window* p_window, SDL_Surface* p_screen, bool p_isIp);
+	std::string GetIpFromPlayer(SDL_Window* p_window, SDL_Surface* p_screen, SDL_Surface* p_background, bool p_isIp);
 	void PrintIp(SDL_Window* p_window, std::string p_text, std::string p_port, SDL_Surface* p_screen);
 	void Shutdown();
 

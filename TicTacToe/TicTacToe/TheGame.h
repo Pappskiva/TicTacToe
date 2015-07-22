@@ -15,6 +15,7 @@ public:
 	void Shutdown();
 
 private:
+	void UpdateNetwork(SDL_Event e);
 	bool m_exit;
 
 	SDL_Window* m_window;
@@ -30,5 +31,6 @@ private:
 	Button* m_HostButton;
 	Button* m_DisconnectButton;
 	TextRenderer m_textRenderer;
+	bool gameHasStarter;
 };
 

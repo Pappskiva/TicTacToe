@@ -7,6 +7,7 @@ TheGame::TheGame(){}
 TheGame::~TheGame(){}
 void TheGame::Initialize()
 {
+	gameHasStarter = false;
 	m_screen = NULL;
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -59,8 +60,39 @@ bool TheGame::Update()
 		if (e.type == SDL_QUIT)
 		{
 			m_exit = true;
+			Network::GetInstance()->SendDisconnectMessage();
 		}
 	}
+	UpdateNetwork(e);
+	if (gameHasStarter)
+	{
+		m_GameBoard->Update(m_screen, &e);
+	}
+
+	if (m_ExitButton->IsClicked(m_screen, &e))
+	{
+		m_exit = true;
+		Network::GetInstance()->SendDisconnectMessage();
+	}
+	if (Network::GetInstance()->VictoryState() == 1)
+		SDL_BlitSurface(m_crossVictorySign, NULL, m_screen, &m_VictorySignRect);
+	else if (Network::GetInstance()->VictoryState() == 0)
+		SDL_BlitSurface(m_circleVictorySign, NULL, m_screen, &m_VictorySignRect);
+
+	SDL_UpdateWindowSurface(m_window);
+	if (Network::GetInstance()->StartDisconnect())
+	{
+		Network::GetInstance()->Shutdown();
+	}
+
+	if (m_exit)
+	{
+		Network::GetInstance()->Shutdown();
+	}
+	return m_exit;
+}
+void TheGame::UpdateNetwork(SDL_Event e)
+{
 	Network::GetInstance()->Update();
 	if (Network::GetInstance()->VictoryState() == 2)
 	{
@@ -68,20 +100,9 @@ bool TheGame::Update()
 	}
 	if (Network::GetInstance()->GetState() != 0 && Network::GetInstance()->VictoryState() == 2)
 	{
-		m_GameBoard->Update(m_screen, &e);
-		if (Network::GetInstance()->StartDisconnect())
-		{
-			///BILD?
-			Network::GetInstance()->Shutdown();
-		}
+		gameHasStarter = true;
 	}
 
-	if (m_ExitButton->IsClicked(m_screen, &e))
-	{
-		m_exit = true;
-	}
-	//char* ip = "169.254.12.164";//Laptop
-	char* ip = "169.254.80.80";//Desktop
 	if (Network::GetInstance()->GetState() == 0)
 	{
 		if (m_HostButton->IsClicked(m_screen, &e))
@@ -90,18 +111,33 @@ bool TheGame::Update()
 		}
 		else if (m_ConnectButton->IsClicked(m_screen, &e))
 		{
-			std::string ipString = m_textRenderer.GetIpFromPlayer(m_window, m_screen, true);
-			std::string portString = m_textRenderer.GetIpFromPlayer(m_window, m_screen, false);
 
-			char* connectIp = new char[ipString.length() + 1];
-			char* connectPort = new char[portString.length() + 1];
+			std::string ipString = m_textRenderer.GetIpFromPlayer(m_window, m_screen, m_backGround, true);
+			if (ipString != "Quit")
+			{
+				std::string portString = m_textRenderer.GetIpFromPlayer(m_window, m_screen, m_backGround, false);
+				if (portString != "Quit")
+				{
+					char* connectIp = new char[ipString.length() + 1];
+					char* connectPort = new char[portString.length() + 1];
 
-			strcpy(connectIp, ipString.c_str());
-			strcpy(connectPort, portString.c_str());
-			Network::GetInstance()->InitializeClient(connectPort, connectIp);
-			//Network::GetInstance()->InitializeClient("27015", ip);
-			delete connectIp;
-			delete connectPort;
+					std::strcpy(connectIp, ipString.c_str());
+					std::strcpy(connectPort, portString.c_str());
+
+					Network::GetInstance()->InitializeClient(connectPort, connectIp);
+
+					delete connectIp;
+					delete connectPort;
+				}
+				else
+				{
+					m_exit = true;
+				}
+			}
+			else
+			{
+				m_exit = true;
+			}
 		}
 	}
 	else
@@ -111,19 +147,6 @@ bool TheGame::Update()
 			Network::GetInstance()->Shutdown();
 		}
 	}
-
-
-	if (Network::GetInstance()->VictoryState() == 0)
-		SDL_BlitSurface(m_circleVictorySign, NULL, m_screen, &m_VictorySignRect);
-	else if (Network::GetInstance()->VictoryState() == 1)
-		SDL_BlitSurface(m_crossVictorySign, NULL, m_screen, &m_VictorySignRect);
-
-	SDL_UpdateWindowSurface(m_window);
-	if (m_exit)
-	{
-		Network::GetInstance()->Shutdown();
-	}
-	return m_exit;
 }
 void TheGame::Shutdown()
 {
@@ -145,6 +168,5 @@ void TheGame::Shutdown()
 	delete m_DisconnectButton;
 	delete m_ExitButton;
 	delete m_HostButton;
-	//delete m_textRenderer;
 	SDL_DestroyWindow(m_window);
 }

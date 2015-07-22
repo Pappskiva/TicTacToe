@@ -9,6 +9,11 @@ Network::Network()
 {
 	m_hostIsInitialized = false;
 	m_clientIsInitialized = false;
+
+	m_savedIp = false;
+	m_disconnect = false;
+	m_victory = 2;
+	m_whooseTurn = 0;
 }
 Network::~Network(){}
 Network* Network::GetInstance()
@@ -64,11 +69,6 @@ void Network::print_addr(PIP_ADAPTER_UNICAST_ADDRESS ua)
 
 void Network::InitializeHost(char* p_port, SDL_Window* p_window, SDL_Surface* p_screen, TextRenderer *p_textRenderer)
 {
-	m_savedIp = false;
-	m_disconnect = false;
-	test = 0;
-	m_victory = 2;
-	m_whooseTurn = 0;
 	int iResult;
 	printf("This is the host\n");
 
@@ -246,10 +246,6 @@ void Network::InitializeHost(char* p_port, SDL_Window* p_window, SDL_Surface* p_
 }
 void Network::InitializeClient(char* p_port, char* p_ip)
 {
-	m_disconnect = false;
-	m_victory = 2;
-	test = 0;
-	m_whooseTurn = 0;
 	int iResult;
 	printf("This is the client\n");
 	if (m_hostIsInitialized)//If changed from host to client
@@ -402,12 +398,11 @@ void Network::Update()
 }
 void Network::Shutdown()
 {
-	//if (m_hostIsInitialized)
-	//{
-	//}
-	//if (m_clientIsInitialized)
-	//{
-	//}
+	SendDisconnectMessage();
+	for (unsigned int i = 0; i < 9; i++)
+	{
+		m_tableLayout[i].value = 2;
+	}
 	m_instance->Disconnect();
 	m_instance = nullptr;
 	delete m_instance;
@@ -739,7 +734,7 @@ void Network::HandleServerMessage(char p_message[])
 				m_victory = 1;
 			}
 			break;
-		case '3'://Disconnect
+		case '3'://Disconnectu
 			m_disconnect = true;
 		default:
 			printf("Not a message\n");
@@ -800,4 +795,8 @@ bool Network::StartDisconnect()
 int Network::VictoryState()
 {
 	return m_victory;
+}
+void Network::SendDisconnectMessage()
+{
+	SendText("33333333333");
 }

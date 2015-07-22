@@ -17,7 +17,7 @@ void TextRenderer::Initialize()
 		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
 	}
 }
-std::string TextRenderer::GetIpFromPlayer(SDL_Window* p_window, SDL_Surface* p_screen, bool p_isIp)
+std::string TextRenderer::GetIpFromPlayer(SDL_Window* p_window, SDL_Surface* p_screen, SDL_Surface* p_background, bool p_isIp)
 {
 	SDL_StartTextInput();
 	std::string returnString = "";
@@ -35,6 +35,11 @@ std::string TextRenderer::GetIpFromPlayer(SDL_Window* p_window, SDL_Surface* p_s
 		preText = "Port: ";
 		yPos = 50;
 	}
+	SDL_Rect bgRect;
+	bgRect.x = 0;
+	bgRect.y = yPos;
+	SDL_BlitSurface(p_background, NULL, p_screen, &bgRect);
+	PrintText(yPos, p_window, (preText + returnString), p_screen);
 
 	PrintText(yPos, p_window, preText, p_screen);
 	while (!textFinished)
@@ -44,11 +49,11 @@ std::string TextRenderer::GetIpFromPlayer(SDL_Window* p_window, SDL_Surface* p_s
 		{
 			if (e.type == SDL_QUIT)
 			{
-				textFinished = true;
+				return "Quit";
 			}
 			else if (e.type == SDL_KEYDOWN)
 			{
-				if (e.key.keysym.sym == SDLK_KP_ENTER)
+				if (e.key.keysym.sym == SDLK_KP_ENTER || e.key.keysym.sym == SDLK_RETURN)
 				{
 					textFinished = true;
 					renderText = true;
@@ -72,6 +77,7 @@ std::string TextRenderer::GetIpFromPlayer(SDL_Window* p_window, SDL_Surface* p_s
 			}
 			if (renderText)
 			{
+				SDL_BlitSurface(p_background, NULL, p_screen, &bgRect);
 				PrintText(yPos, p_window, (preText + returnString), p_screen);
 			}
 		}
@@ -107,4 +113,7 @@ void TextRenderer::PrintText(int p_yPos, SDL_Window* p_window, std::string p_tex
 }
 void TextRenderer::Shutdown()
 {
+	TTF_CloseFont(m_font);
+	m_font = NULL;
+	TTF_Quit();
 }
