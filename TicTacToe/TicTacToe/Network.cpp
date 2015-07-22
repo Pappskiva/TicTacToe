@@ -39,15 +39,25 @@ void Network::print_addr(PIP_ADAPTER_UNICAST_ADDRESS ua)
 
 		memset(buf, 0, BUFSIZ);
 		getnameinfo(ua->Address.lpSockaddr, ua->Address.iSockaddrLength, buf, sizeof(buf), NULL, 0, NI_NUMERICHOST);
-		//printf("%s\n", buf);
+		printf("%s\n", buf);
 		if (!m_savedIp)
 		{
-			//m_ip = buf;
-			for (int i = 0; i < BUFSIZ; i++)
+			if (buf[0] == '1'&&
+				buf[1] == '9'&&
+				buf[2] == '2'&&
+				buf[3] == '.'&&
+				buf[4] == '1'&&
+				buf[5] == '6'&&
+				buf[6] == '8'&&
+				buf[7] == '.'&&
+				buf[8] == '0')
 			{
-				m_ip[i] = buf[i];
+				for (int i = 0; i < BUFSIZ; i++)
+				{
+					m_ip[i] = buf[i];
+				}
+				m_savedIp = true;
 			}
-			m_savedIp = true;
 		}
 	}
 }
