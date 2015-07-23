@@ -87,9 +87,9 @@ int Tile::GetTileValue()
 {
 	return m_TileValue;
 }
-void Tile::SetTileValue(TileValue p_tileValue)
+void Tile::SetTileValue(int p_tileValue)
 {
-	m_TileValue = p_tileValue;
+	m_TileValue = (TileValue)p_tileValue;
 }
 int Tile::GetTileIndex()
 {

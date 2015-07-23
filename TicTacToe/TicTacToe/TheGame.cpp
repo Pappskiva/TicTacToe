@@ -72,6 +72,10 @@ bool TheGame::Update()
 	{
 		m_GameBoard->Update(m_screen, &e);
 	}
+	else
+	{
+		m_GameBoard->SetAllToDefault();
+	}
 
 	if (m_ExitButton->IsClicked(m_screen, &e))
 	{
@@ -84,7 +88,7 @@ bool TheGame::Update()
 		SDL_BlitSurface(m_circleVictorySign, NULL, m_screen, &m_VictorySignRect);
 
 
-	if (Network::GetInstance()->GetState() != 0)
+	if (Network::GetInstance()->GetState() != 0 && Network::GetInstance()->VictoryState() == 2)
 	{
 		if (Network::GetInstance()->MyTurn())
 		{
@@ -164,6 +168,7 @@ void TheGame::UpdateNetwork(SDL_Event e)
 		if (m_DisconnectButton->IsClicked(m_screen, &e))
 		{
 			Network::GetInstance()->Shutdown();
+			gameHasStarter = false;
 		}
 	}
 }

@@ -6,14 +6,6 @@ GameBoard::GameBoard(){}
 GameBoard::~GameBoard(){}
 void GameBoard::Initialize()
 {
-	//int yPos = 0;
-	//int xPos = 0;
-	//for (unsigned int i = 0; i < 9; i++)
-	//{
-	//	Tile tile;
-	//	tile.Initialize(xPos, yPos);
-	//	m_Tiles.push_back(tile);
-	//}
 	m_Tile1 = new Tile();
 	m_Tile2 = new Tile();
 	m_Tile3 = new Tile();
@@ -82,6 +74,18 @@ void GameBoard::Shutdown()
 	delete m_Tile8;
 	delete m_Tile9;
 	SDL_FreeSurface(m_Background);
+}
+void GameBoard::SetAllToDefault()
+{
+	m_Tile1->SetTileValue(2);
+	m_Tile2->SetTileValue(2);
+	m_Tile3->SetTileValue(2);
+	m_Tile4->SetTileValue(2);
+	m_Tile5->SetTileValue(2);
+	m_Tile6->SetTileValue(2);
+	m_Tile7->SetTileValue(2);
+	m_Tile8->SetTileValue(2);
+	m_Tile9->SetTileValue(2);
 }
 void GameBoard::TileClickCheck(Tile *p_tile, SDL_Surface* p_screen, SDL_Event* p_e)
 {

@@ -11,6 +11,7 @@ public:
 	void Initialize();
 	bool Update(SDL_Surface* p_screen, SDL_Event* p_e);
 	void Shutdown();
+	void SetAllToDefault();
 
 private:
 	//std::vector<Tile> m_Tiles;

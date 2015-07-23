@@ -17,7 +17,7 @@ public:
 	bool Update(SDL_Surface* p_screen, SDL_Event* p_e);
 	void Shutdown();
 	int GetTileValue();
-	void SetTileValue(TileValue p_tileValue);
+	void SetTileValue(int p_tileValue);
 	int GetTileIndex();
 	void SetIfSelected(bool p_isSelected);
 	

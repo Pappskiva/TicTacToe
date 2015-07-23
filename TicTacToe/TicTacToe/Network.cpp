@@ -487,7 +487,7 @@ void Network::SendText(char* p_text)
 		int iSendResult = send(ClientSocket, p_text, (int)strlen(p_text), 0);
 		if (iSendResult == SOCKET_ERROR) 
 		{
-			printf("send from host failed: %d\n", WSAGetLastError());
+		//	printf("send from host failed: %d\n", WSAGetLastError());
 		}
 	}
 	else if (m_clientIsInitialized)
@@ -495,7 +495,7 @@ void Network::SendText(char* p_text)
 		int iResult = send(ConnectSocket, p_text, (int)strlen(p_text), 0);
 		if (iResult == SOCKET_ERROR) 
 		{
-			printf("send from client failed: %d\n", WSAGetLastError());
+		//	printf("send from client failed: %d\n", WSAGetLastError());
 		}
 	}
 }
