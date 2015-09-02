@@ -50,12 +50,12 @@ void Network::print_addr(PIP_ADAPTER_UNICAST_ADDRESS ua)
 			if (buf[0] == '1'&&
 				buf[1] == '9'&&
 				buf[2] == '2'&&
-				buf[3] == '.'&&
+				buf[3] == '.'/*&&
 				buf[4] == '1'&&
 				buf[5] == '6'&&
 				buf[6] == '8'&&
 				buf[7] == '.'&&
-				buf[8] == '0')
+				buf[8] == '0'*/)
 			{
 				for (int i = 0; i < BUFSIZ; i++)
 				{

@@ -7,15 +7,15 @@ Tile::~Tile(){}
 void Tile::Initialize(int p_PosX, int p_PosY, int p_index)
 {
 	m_Cross = NULL;
-	m_Cross = SDL_LoadBMP("Cross.bmp");
+	m_Cross = SDL_LoadBMP("Bilder//Cross.bmp");
 	m_Circle = NULL;
-	m_Circle = SDL_LoadBMP("Circle.bmp");
+	m_Circle = SDL_LoadBMP("Bilder//Circle.bmp");
 	m_SelectedCross = NULL;
-	m_SelectedCross = SDL_LoadBMP("SelectedCross.bmp");
+	m_SelectedCross = SDL_LoadBMP("Bilder//SelectedCross.bmp");
 	m_SelectedCircle = NULL;
-	m_SelectedCircle = SDL_LoadBMP("SelectedCircle.bmp");
+	m_SelectedCircle = SDL_LoadBMP("Bilder//SelectedCircle.bmp");
 	m_Empty = NULL;
-	m_Empty = SDL_LoadBMP("Empty.bmp");
+	m_Empty = SDL_LoadBMP("Bilder//Empty.bmp");
 	m_RenderedSprite = NULL;
 	m_rectangle.x = p_PosX;
 	m_rectangle.y = p_PosY;

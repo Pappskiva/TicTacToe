@@ -25,7 +25,7 @@ void GameBoard::Initialize()
 	m_Tile8->Initialize(105, 210,8);
 	m_Tile9->Initialize(210, 210,9);
 	m_Background = NULL;
-	m_Background = SDL_LoadBMP("TicTactoeGrid.bmp");
+	m_Background = SDL_LoadBMP("Bilder//TicTactoeGrid.bmp");
 	m_selectedTile = NULL;
 }
 bool GameBoard::Update(SDL_Surface* p_screen, SDL_Event* p_e)

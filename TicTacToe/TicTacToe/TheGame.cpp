@@ -25,15 +25,15 @@ void TheGame::Initialize()
 		m_screen = SDL_GetWindowSurface(m_window);
 	}
 	m_backGround = NULL;
-	m_backGround = SDL_LoadBMP("Background.bmp");
+	m_backGround = SDL_LoadBMP("Bilder//Background.bmp");
 	m_circleVictorySign = NULL;
-	m_circleVictorySign = SDL_LoadBMP("CircleVictorySign.bmp");
+	m_circleVictorySign = SDL_LoadBMP("Bilder//CircleVictorySign.bmp");
 	m_crossVictorySign = NULL;
-	m_crossVictorySign = SDL_LoadBMP("CrossVictorySign.bmp");
+	m_crossVictorySign = SDL_LoadBMP("Bilder//CrossVictorySign.bmp");
 	m_circleTurnSign = NULL;
-	m_circleTurnSign = SDL_LoadBMP("CircleTurn.bmp");
+	m_circleTurnSign = SDL_LoadBMP("Bilder//CircleTurn.bmp");
 	m_crossTurnSign = NULL;
-	m_crossTurnSign = SDL_LoadBMP("CrossTurn.bmp");
+	m_crossTurnSign = SDL_LoadBMP("Bilder//CrossTurn.bmp");
 	m_exit = false;
 	m_VictorySignRect.x = 0;
 	m_VictorySignRect.y = 315;
@@ -45,10 +45,10 @@ void TheGame::Initialize()
 	m_DisconnectButton = new Button();
 	m_ExitButton = new Button();
 	m_HostButton = new Button();
-	m_ConnectButton->Initialize("Button_Connect.bmp", 315, 0);
-	m_HostButton->Initialize("Button_Host.bmp", 315, 105);
-	m_ExitButton->Initialize("Button_Exit.bmp", 315, 210);
-	m_DisconnectButton->Initialize("Button_Disconnect.bmp", 315, 0, true);
+	m_ConnectButton->Initialize("Bilder//Button_Connect.bmp", 315, 0);
+	m_HostButton->Initialize("Bilder//Button_Host.bmp", 315, 105);
+	m_ExitButton->Initialize("Bilder//Button_Exit.bmp", 315, 210);
+	m_DisconnectButton->Initialize("Bilder//Button_Disconnect.bmp", 315, 0, true);
 
 	//m_textRenderer = new TextRenderer();
 	m_textRenderer.Initialize();
